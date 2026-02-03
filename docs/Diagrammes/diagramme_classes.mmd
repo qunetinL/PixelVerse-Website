@@ -7,6 +7,8 @@ classDiagram
         - motDePasse : String
         - role : String
         - estSuspendu : Boolean
+        - reset_token : String
+        - reset_expires_at : DateTime
         - dateCreation : Date
         + seConnecter()
         + seDeconnecter()
@@ -44,12 +46,13 @@ classDiagram
         - dateDepot : Date
     }
 
-    class LogAdministrateur {
-        - id : Int
-        - action : String
-        - date : Date
-        - details : String
-    }
+    %% LogAdministrateur est géré dans MongoDB (NoSQL)
+    %% class LogAdministrateur {
+    %%     - id : String
+    %%     - action : String
+    %%     - date : Date
+    %%     - details : JSON
+    %% }
 
     class Employe {
         + validerPersonnage()
@@ -71,4 +74,4 @@ classDiagram
     Personnage "1" --> "0..*" Accessoire : équipé de
     Personnage "1" --> "0..*" Avis : reçoit
     Accessoire "0..*" --> "1" Employe : géré par
-    LogAdministrateur "0..*" --> "1" Admin : consulté par
+    %% LogAdministrateur "0..*" --> "1" Admin : consulté par (en NoSQL)
