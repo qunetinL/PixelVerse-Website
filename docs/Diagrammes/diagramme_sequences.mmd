@@ -1,0 +1,47 @@
+sequenceDiagram
+    autonumber
+    actor Joueur
+    participant UI as "Interface Web"
+    participant Back as "Backend API"
+    participant DB as "Base de Données"
+    participant Email as "Service Email"
+    actor Employe
+
+    %% Étape 1 : Création initiale
+    Joueur ->> UI : Clique "Créer Personnage"
+    UI ->> Joueur : Affiche formulaire (traits visage, nom)
+
+    Joueur ->> UI : Remplit et valide
+    UI ->> Back : POST /character/create
+    Back ->> Back : Vérif. unicité Nom
+    Back ->> DB : INSERT Personnage (Statut = "En attente")
+    DB -->> Back : ID Personnage
+    Back -->> UI : Confirmation "En attente"
+    UI -->> Joueur : Message succès
+
+    %% Étape 2 : Validation
+    Employe ->> UI : Accède au Back-Office
+    UI ->> Back : GET /admin/characters?status=pending
+    Back -->> UI : Liste personnages
+    UI -->> Employe : Affiche liste
+
+    Employe ->> UI : Clique "Approuver"
+    UI ->> Back : PATCH /character/{id}/approve
+    Back ->> DB : UPDATE Statut = "Validé"
+    DB -->> Back : OK
+    Back ->> Email : Envoi notification
+    Email -->> Joueur : Mail "Personnage validé !"
+    Back -->> UI : Confirmation
+    UI -->> Employe : Succès
+
+    %% Étape 3 : Personnalisation
+    Joueur ->> UI : Accède au détail (après mail)
+    UI ->> Back : GET /character/{id}
+    Back -->> UI : Données + Accessoires débloqués
+
+    Joueur ->> UI : Ajoute Armure/Arme
+    UI ->> Back : POST /character/{id}/equip
+    Back ->> DB : UPDATE équipements
+    DB -->> Back : OK
+    Back -->> UI : Sauvegarde OK
+    UI -->> Joueur : Personnage mis à jour

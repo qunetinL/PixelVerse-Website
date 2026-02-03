@@ -1,0 +1,73 @@
+graph TD
+
+%% Acteurs
+Visiteur["Visiteur"]
+Joueur["Joueur (Connecté)"]
+Employe["Employé"]
+Admin["Administrateur"]
+
+%% Héritage des rôles
+Visiteur --> Joueur
+Joueur --> Employe
+Employe --> Admin
+
+%% Front Office
+subgraph FrontOffice["Front-Office (Site Public)"]
+  UC1["S'inscrire"]
+  UC2["Se connecter / Mot de passe oublié"]
+  UC3["Consulter la galerie des personnages"]
+  UC4["Filtrer les personnages"]
+  UC5["Voir détail personnage"]
+  UC6["Contacter le support"]
+end
+
+%% Espace Utilisateur
+subgraph EspaceUtilisateur["Espace Utilisateur"]
+  UC7["Créer un personnage - Base"]
+  UC8["Personnaliser - Accessoires / Armes"]
+  UC9["Dupliquer un personnage"]
+  UC10["Partager / Arrêter partage"]
+  UC11["Supprimer un personnage"]
+  UC12["Déposer un avis"]
+end
+
+%% Back Office
+subgraph BackOffice["Back-Office (Gestion)"]
+  UC13["Valider / Refuser Personnage"]
+  UC14["Valider / Refuser Avis"]
+  UC15["Gérer les articles - CRUD"]
+  UC16["Suspendre / Supprimer Compte"]
+  UC17["Gérer les comptes Employés"]
+  UC18["Consulter les Logs"]
+end
+
+%% Liens Visiteur
+Visiteur --> UC1
+Visiteur --> UC2
+Visiteur --> UC3
+Visiteur --> UC6
+
+%% Include
+UC3 -->|include| UC4
+UC3 -->|include| UC5
+
+%% Liens Joueur
+Joueur --> UC7
+Joueur --> UC8
+Joueur --> UC9
+Joueur --> UC10
+Joueur --> UC11
+Joueur --> UC12
+
+%% Condition
+UC8 -.->|"Après validation employé"| UC13
+
+%% Liens Employé
+Employe --> UC13
+Employe --> UC14
+Employe --> UC15
+Employe --> UC16
+
+%% Liens Admin
+Admin --> UC17
+Admin --> UC18

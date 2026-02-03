@@ -1,0 +1,74 @@
+classDiagram
+    %% Classes principales
+    class Utilisateur {
+        - id : Int
+        - pseudo : String
+        - email : String
+        - motDePasse : String
+        - role : String
+        - estSuspendu : Boolean
+        - dateCreation : Date
+        + seConnecter()
+        + seDeconnecter()
+    }
+
+    class Personnage {
+        - id : Int
+        - nom : String
+        - genre : Enum
+        - visage_yeux : String
+        - visage_nez : String
+        - visage_bouche : String
+        - couleur_peau : String
+        - couleur_cheveux : String
+        - estPartage : Boolean
+        - statut_validation : String
+        - dateCreation : Date
+        + creer()
+        + dupliquer()
+    }
+
+    class Accessoire {
+        - id : Int
+        - nom : String
+        - type : Enum
+        - image : String
+        - estActif : Boolean
+    }
+
+    class Avis {
+        - id : Int
+        - note : Int
+        - commentaire : String
+        - statut_validation : String
+        - dateDepot : Date
+    }
+
+    class LogAdministrateur {
+        - id : Int
+        - action : String
+        - date : Date
+        - details : String
+    }
+
+    class Employe {
+        + validerPersonnage()
+        + gererAccessoire()
+    }
+
+    class Admin {
+        + creerCompteEmploye()
+    }
+
+    %% Héritage
+    Utilisateur <|-- Employe
+    Utilisateur <|-- Admin
+    Employe <|-- Admin
+
+    %% Associations
+    Utilisateur "1" --> "0..*" Personnage : possède
+    Utilisateur "1" --> "0..*" Avis : rédige
+    Personnage "1" --> "0..*" Accessoire : équipé de
+    Personnage "1" --> "0..*" Avis : reçoit
+    Accessoire "0..*" --> "1" Employe : géré par
+    LogAdministrateur "0..*" --> "1" Admin : consulté par
