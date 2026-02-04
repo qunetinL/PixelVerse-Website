@@ -1,36 +1,23 @@
 <?php
-$host = 'db';
-$db = getenv('MYSQL_DATABASE') ?: 'pixelverse';
-$user = getenv('MYSQL_USER') ?: 'pixeluser';
-$pass = getenv('MYSQL_PASSWORD') ?: 'pixelpassword';
-$charset = 'utf8mb4';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
+/**
+ * Front Controller : Point d'entrée de l'application
+ */
 
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-    echo "<h1>Connexion MySQL : <span style='color:green'>OK</span></h1>";
-} catch (\PDOException $e) {
-    echo "<h1>Connexion MySQL : <span style='color:red'>ERREUR</span></h1>";
-    echo "Message : " . $e->getMessage();
-}
+require_once dirname(__DIR__) . '/src/Core/Autoloader.php';
 
-try {
-    $mongoUser = getenv('MONGO_INITDB_ROOT_USERNAME') ?: 'root';
-    $mongoPass = getenv('MONGO_INITDB_ROOT_PASSWORD') ?: 'rootpassword';
+use PixelVerseApp\Core\Autoloader;
+use PixelVerseApp\Router\Router;
+use PixelVerseApp\Controllers\HomeController;
 
-    $manager = new MongoDB\Driver\Manager("mongodb://$mongoUser:$mongoPass@mongo:27017");
-    $command = new MongoDB\Driver\Command(['ping' => 1]);
-    $cursor = $manager->executeCommand('admin', $command);
-    echo "<h1>Connexion MongoDB : <span style='color:green'>OK</span></h1>";
-} catch (Exception $e) {
-    echo "<h1>Connexion MongoDB : <span style='color:red'>ERREUR</span></h1>";
-    echo "Message : " . $e->getMessage();
-}
+// Initialisation de l'autoloader
+Autoloader::register();
 
-phpinfo();
+// Création du routeur
+$router = new Router();
+
+// Définition des routes de l'application
+$router->add('GET', '/', [HomeController::class, 'index']);
+
+// Dispatching de la requête entrante
+$router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);

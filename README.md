@@ -1,61 +1,18 @@
-# PixelVerse Studios
+# PixelVerse Studios - Système de Gestion de Personnages
+
+Bienvenue dans le dépôt officiel de PixelVerse Studios. Ce projet implémente un système complet de gestion de personnages RPG avec une architecture MVC personnalisée, utilisant PHP, MySQL et MongoDB.
 
 ## Stack Technique
-
-- **Back-End** : PHP 8.2
-- **Base de Données Relationnelle** : MySQL 8.0
-- **Base de Données NoSQL** : MongoDB 6.0 (Logs & Audit)
-- **Front-End** : HTML5, CSS3, Bootstrap 5
+- **Back-End** : PHP 8.2 (MVC Custom)
+- **Base de Données** : MySQL 8.0 & MongoDB 6.0
+- **Front-End** : HTML5, CSS3
 - **Environnement** : Docker & Docker Compose
 
-## Installation
+## Documentation
 
-### Pré-requis
-- Docker
-- Git
+Pour commencer à travailler sur le projet, veuillez consulter notre guide détaillé :
 
-### Lancement Rapide
+**[Manuel d'Installation Locale](docs/INSTALLATION.md)**
 
-1. Cloner le dépôt :
-   ```bash
-   git clone https://github.com/quentinL/PixelVerse-Website.git
-   cd PixelVerse-Website
-   ```
-
-2. Démarrer l'environnement :
-   ```bash
-   docker-compose up -d --build
-   ```
-
-3. Accéder à l'application :
-   - **Site Web** : [http://localhost:8080](http://localhost:8080)
-   - **PhpMyAdmin** (SQL) : [http://localhost:8081](http://localhost:8081)
-   - **Mongo Express** (NoSQL) : [http://localhost:8082](http://localhost:8082)
-
-### Commandes
-
-- **Lancer le projet** :
-  ```bash
-  docker-compose up -d --build
-  ```
-
-- **Arrêter les conteneurs** :
-  ```bash
-  docker-compose down
-  ```
-
-- **Voir les logs en temps réel** :
-  ```bash
-  docker-compose logs -f
-  ```
-
-- **Accéder au terminal du conteneur PHP** :
-  ```bash
-  docker-compose exec www bash
-  ```
-
-## Structure du Projet
-
-- `www/` : Code source PHP/HTML
-- `docker-compose.yml` : Configuration des conteneurs
-- `Dockerfile` : Configuration personnalisée de l'image PHP
+---
+*© 2026 PixelVerse Studios. Tous droits réservés.*

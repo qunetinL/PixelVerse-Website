@@ -1,0 +1,22 @@
+{
+    "name": "quentinl/pixelverse-website",
+    "description": "PixelVerse Studios - RPG Character Management System",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "PixelVerseApp\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PixelVerseTests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    }
+}
