@@ -1,0 +1,70 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "PixelVerse: Build & Start",
+            "type": "shell",
+            "command": "docker compose up --build -d",
+            "group": {
+                "kind": "build",
+                "isDefault": true,
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "PixelVerse: Start (Fast)",
+            "type": "shell",
+            "command": "docker compose up -d",
+            "group": {
+                "kind": "build",
+                "isDefault": true,
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "PixelVerse: Stop",
+            "type": "shell",
+            "command": "docker compose down",
+            "group": {
+                "kind": "build",
+                "isDefault": true,
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "PixelVerse: Full Reset (Clean Volumes)",
+            "type": "shell",
+            "command": "docker compose down -v && docker compose up --build -d",
+            "group": {
+                "kind": "build",
+                "isDefault": true,
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "PixelVerse: Run Tests",
+            "type": "shell",
+            "command": "docker compose exec www ./vendor/bin/phpunit",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        }
+    ]
+}

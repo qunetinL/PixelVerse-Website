@@ -1,8 +1,10 @@
 .env.local
 vendor/
 .idea/
-.vscode/
+.vscode/*
+!.vscode/tasks.json
 *.log
 .DS_Store
 *.swp
 *.odt
+*.cache
