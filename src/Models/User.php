@@ -73,7 +73,7 @@ class User
     /**
      * Génère un token de réinitialisation de mot de passe
      */
-    public function generateResetToken(string $email)
+    public function generateResetToken(string $email): string|bool
     {
         $token = bin2hex(random_bytes(32));
         $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));

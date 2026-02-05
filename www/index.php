@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 /**
  * Front Controller : Point d'entrée de l'application
  */

@@ -11,11 +11,6 @@ class AuthController extends BaseController
     public function __construct()
     {
         $this->userModel = new User();
-
-        // Démarrage de la session si elle n'est pas déjà lancée
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
     }
 
     /**
@@ -101,7 +96,15 @@ class AuthController extends BaseController
         }
 
         if ($this->userModel->create($data)) {
-            header('Location: /connexion?success=compte_cree');
+            // Auto-connexion après inscription
+            $user = $this->userModel->findByEmail($data['email']);
+            $_SESSION['user'] = [
+                'id' => $user['id'],
+                'pseudo' => $user['pseudo'],
+                'role' => $user['role']
+            ];
+
+            header('Location: /?success=compte_cree');
             exit;
         }
 
