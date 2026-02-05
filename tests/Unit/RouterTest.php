@@ -21,7 +21,7 @@ class RouterTest extends TestCase
             $called = true;
         });
 
-        // Mocking behavior or using output buffering to test dispatch
+        // Simulation du comportement (mock) pour tester le dispatch
         ob_start();
         $this->router->dispatch('GET', '/test');
         ob_end_clean();
