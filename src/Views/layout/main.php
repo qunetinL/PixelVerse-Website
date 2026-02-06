@@ -25,11 +25,16 @@
                     <li><a href="/" class="active">Accueil</a></li>
                     <li><a href="/galerie">Galerie</a></li>
                     <?php if (isset($_SESSION['user'])): ?>
-                        <li><a href="/creer-perso">Créer Perso</a></li>
-                        <li><a href="/mon-profil" class="btn-connexion">
-                                <i class="fas fa-user-circle"></i> <?php echo $_SESSION['user']['pseudo']; ?>
-                            </a></li>
-                        <li><a href="/deconnexion" title="Déconnexion"><i class="fas fa-sign-out-alt"></i></a></li>
+                        <li><a href="/creer-personnage" class="nav-link standout">Créer Perso</a></li>
+                        <li><a href="/mes-personnages" class="nav-link">Mes Persos</a></li>
+                        <li class="user-profile-item">
+                            <div class="user-profile">
+                                <span class="pseudo"><?= htmlspecialchars($_SESSION['user']['pseudo']) ?></span>
+                                <a href="/deconnexion" class="logout-icon" title="Déconnexion">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </a>
+                            </div>
+                        </li>
                     <?php else: ?>
                         <li><a href="/contact">Contact</a></li>
                         <li><a href="/connexion" class="btn-connexion">Connexion</a></li>

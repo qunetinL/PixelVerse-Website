@@ -12,6 +12,7 @@ use PixelVerseApp\Core\Autoloader;
 use PixelVerseApp\Router\Router;
 use PixelVerseApp\Controllers\HomeController;
 use PixelVerseApp\Controllers\AuthController;
+use PixelVerseApp\Controllers\CharacterController;
 
 // Initialisation de l'autoloader
 Autoloader::register();
@@ -30,6 +31,12 @@ $router->add('POST', '/inscription', [AuthController::class, 'register']);
 $router->add('GET', '/deconnexion', [AuthController::class, 'logout']);
 $router->add('GET', '/mot-de-passe-oublie', [AuthController::class, 'showForgotPassword']);
 $router->add('POST', '/mot-de-passe-oublie', [AuthController::class, 'forgotPassword']);
+
+// Routes Personnages (Utilisateur)
+$router->add('GET', '/mes-personnages', [CharacterController::class, 'index']);
+$router->add('GET', '/creer-personnage', [CharacterController::class, 'create']);
+$router->add('POST', '/creer-personnage', [CharacterController::class, 'store']);
+$router->add('GET', '/supprimer-personnage', [CharacterController::class, 'delete']);
 
 // Dispatching de la requête entrante
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
