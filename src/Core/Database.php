@@ -53,7 +53,7 @@ class Database
     /**
      * Retourne l'objet PDO pour effectuer des requêtes
      */
-    public function getConnection()
+    public function getConnection(): PDO
     {
         return $this->pdo;
     }

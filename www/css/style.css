@@ -275,3 +275,18 @@ footer {
         font-size: 2.5rem;
     }
 }
+
+/* Admin UI */
+.nav-link.admin-highlight {
+    color: #f1c40f !important;
+    font-weight: bold;
+    border: 1px solid rgba(241, 196, 15, 0.3);
+    padding: 5px 12px !important;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.nav-link.admin-highlight:hover {
+    background: rgba(241, 196, 15, 0.1);
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.2);
+}

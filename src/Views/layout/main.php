@@ -25,6 +25,9 @@
                     <li><a href="/" class="active">Accueil</a></li>
                     <li><a href="/galerie">Galerie</a></li>
                     <?php if (isset($_SESSION['user'])): ?>
+                        <?php if (in_array($_SESSION['user']['role'], ['admin', 'employe'])): ?>
+                            <li><a href="/admin/accessoires" class="nav-link admin-highlight">Admin</a></li>
+                        <?php endif; ?>
                         <li><a href="/creer-personnage" class="nav-link standout">Créer Perso</a></li>
                         <li><a href="/mes-personnages" class="nav-link">Mes Persos</a></li>
                         <li class="user-profile-item">

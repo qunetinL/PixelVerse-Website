@@ -3,6 +3,8 @@
 namespace PixelVerseApp\Controllers;
 
 use PixelVerseApp\Models\Character;
+use PixelVerseApp\Models\Accessory;
+use PixelVerseApp\Core\Database;
 
 class CharacterController extends BaseController
 {
@@ -37,8 +39,16 @@ class CharacterController extends BaseController
      */
     public function create()
     {
+        $accessoryModel = new Accessory();
+        $accessories = [
+            'armes' => $accessoryModel->getActiveByType('arme'),
+            'vetements' => $accessoryModel->getActiveByType('vetement'),
+            'accessoires' => $accessoryModel->getActiveByType('accessoire')
+        ];
+
         $this->render('characters/create', [
-            'title' => 'Création de Personnage - PixelVerse'
+            'title' => 'Création de Personnage - PixelVerse',
+            'accessories' => $accessories
         ]);
     }
 
@@ -68,6 +78,14 @@ class CharacterController extends BaseController
         }
 
         if ($this->characterModel->create($data)) {
+            $db = Database::getInstance()->getConnection();
+            $charId = $db->lastInsertId();
+
+            // Équipement des accessoires sélectionnés
+            if (isset($_POST['accessories']) && is_array($_POST['accessories'])) {
+                $this->characterModel->syncAccessories($charId, $_POST['accessories']);
+            }
+
             header('Location: /mes-personnages?success=personnage_cree');
             exit;
         }

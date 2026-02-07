@@ -79,7 +79,27 @@
                 </div>
 
                 <div class="tab-content hidden" id="equipement">
-                    <p class="empty-msg">Les équipements seront disponibles après validation.</p>
+                    <div class="accessory-selection">
+                        <?php foreach (['armes' => 'Armes', 'vetements' => 'Vêtements', 'accessoires' => 'Accessoires'] as $key => $label): ?>
+                            <div class="accessory-category">
+                                <h3><?= $label ?></h3>
+                                <div class="accessory-grid">
+                                    <?php foreach ($accessories[$key] as $acc): ?>
+                                        <label class="accessory-item">
+                                            <input type="checkbox" name="accessories[]" value="<?= $acc['id'] ?>">
+                                            <div class="accessory-card">
+                                                <i class="fas <?= htmlspecialchars($acc['icon']) ?>"></i>
+                                                <span><?= htmlspecialchars($acc['name']) ?></span>
+                                            </div>
+                                        </label>
+                                    <?php endforeach; ?>
+                                    <?php if (empty($accessories[$key])): ?>
+                                        <p class="empty-cat">Pas d'article disponible.</p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
 
                 <div class="tab-content hidden" id="stats">
@@ -281,6 +301,65 @@
         color: var(--color-text-dim);
         font-style: italic;
         font-size: 0.9rem;
+    }
+
+    /* Accessory Selection Styles */
+    .accessory-category h3 {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        color: var(--color-primary);
+        margin: 20px 0 10px 0;
+        letter-spacing: 1px;
+    }
+
+    .accessory-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 15px;
+    }
+
+    .accessory-item input {
+        display: none;
+    }
+
+    .accessory-card {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .accessory-card i {
+        font-size: 1.5rem;
+        color: var(--color-text-dim);
+    }
+
+    .accessory-card span {
+        font-size: 0.75rem;
+        color: var(--color-text-dim);
+    }
+
+    .accessory-item input:checked+.accessory-card {
+        border-color: var(--color-primary);
+        background: rgba(0, 212, 255, 0.1);
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+    }
+
+    .accessory-item input:checked+.accessory-card i,
+    .accessory-item input:checked+.accessory-card span {
+        color: var(--color-primary);
+    }
+
+    .empty-cat {
+        font-size: 0.8rem;
+        color: #666;
+        font-style: italic;
     }
 
     @media (max-width: 992px) {

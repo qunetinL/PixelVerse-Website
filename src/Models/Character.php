@@ -109,4 +109,61 @@ class Character
             'skin_color' => $skinColors[array_rand($skinColors)]
         ];
     }
+
+    /**
+     * Récupère les accessoires équipés par un personnage
+     */
+    public function getAccessories(int $characterId): array
+    {
+        $sql = "SELECT a.* FROM accessories a 
+                JOIN character_accessories ca ON a.id = ca.accessory_id 
+                WHERE ca.character_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$characterId]);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Équipe un personnage avec un accessoire
+     */
+    public function equipAccessory(int $characterId, int $accessoryId): bool
+    {
+        $sql = "INSERT IGNORE INTO character_accessories (character_id, accessory_id) VALUES (?, ?)";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$characterId, $accessoryId]);
+    }
+
+    /**
+     * Retire un accessoire d'un personnage
+     */
+    public function unequipAccessory(int $characterId, int $accessoryId): bool
+    {
+        $sql = "DELETE FROM character_accessories WHERE character_id = ? AND accessory_id = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$characterId, $accessoryId]);
+    }
+
+    /**
+     * Met à jour tout l'équipement d'un personnage
+     */
+    public function syncAccessories(int $characterId, array $accessoryIds): bool
+    {
+        $this->db->beginTransaction();
+        try {
+            // On retire tout
+            $stmt = $this->db->prepare("DELETE FROM character_accessories WHERE character_id = ?");
+            $stmt->execute([$characterId]);
+
+            // On ajoute les nouveaux
+            $stmt = $this->db->prepare("INSERT INTO character_accessories (character_id, accessory_id) VALUES (?, ?)");
+            foreach ($accessoryIds as $accId) {
+                $stmt->execute([$characterId, (int) $accId]);
+            }
+            $this->db->commit();
+            return true;
+        } catch (\PDOException $e) {
+            $this->db->rollBack();
+            return false;
+        }
+    }
 }
