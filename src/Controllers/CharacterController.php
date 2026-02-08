@@ -4,6 +4,7 @@ namespace PixelVerseApp\Controllers;
 
 use PixelVerseApp\Models\Character;
 use PixelVerseApp\Models\Accessory;
+use PixelVerseApp\Models\Review;
 use PixelVerseApp\Core\Database;
 
 class CharacterController extends BaseController
@@ -112,5 +113,43 @@ class CharacterController extends BaseController
 
         header('Location: /mes-personnages?error=suppression_impossible');
         exit;
+    }
+
+    /**
+     * Affiche les détails d'un personnage (Vue Publique)
+     */
+    public function show()
+    {
+        $id = $_GET['id'] ?? null;
+        if (!$id) {
+            header('Location: /');
+            exit;
+        }
+
+        $character = $this->characterModel->getById((int) $id);
+        if (!$character) {
+            die("Personnage introuvable.");
+        }
+
+        // Récupérer les équipements
+        $equipped = $this->characterModel->getAccessories((int) $id);
+
+        // Récupérer les avis validés
+        $reviewModel = new Review();
+        $reviews = $reviewModel->getVisibleByCharacter((int) $id);
+
+        // Vérifier si l'utilisateur a déjà voté
+        $hasVoted = false;
+        if (isset($_SESSION['user'])) {
+            $hasVoted = $reviewModel->hasUserVoted($_SESSION['user']['id'], (int) $id);
+        }
+
+        $this->render('characters/show', [
+            'title' => $character['name'] . ' - PixelVerse',
+            'character' => $character,
+            'equipped' => $equipped,
+            'reviews' => $reviews,
+            'hasVoted' => $hasVoted
+        ]);
     }
 }

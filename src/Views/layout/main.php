@@ -27,6 +27,7 @@
                     <?php if (isset($_SESSION['user'])): ?>
                         <?php if (in_array($_SESSION['user']['role'], ['admin', 'employe'])): ?>
                             <li><a href="/admin/accessoires" class="nav-link admin-highlight">Admin</a></li>
+                            <li><a href="/admin/avis" class="nav-link admin-highlight">Modération</a></li>
                         <?php endif; ?>
                         <li><a href="/creer-personnage" class="nav-link standout">Créer Perso</a></li>
                         <li><a href="/mes-personnages" class="nav-link">Mes Persos</a></li>

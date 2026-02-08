@@ -14,6 +14,7 @@ use PixelVerseApp\Controllers\HomeController;
 use PixelVerseApp\Controllers\AuthController;
 use PixelVerseApp\Controllers\CharacterController;
 use PixelVerseApp\Controllers\AccessoryController;
+use PixelVerseApp\Controllers\ReviewController;
 
 // Initialisation de l'autoloader
 Autoloader::register();
@@ -36,6 +37,7 @@ $router->add('POST', '/mot-de-passe-oublie', [AuthController::class, 'forgotPass
 // Routes Personnages (Utilisateur)
 $router->add('GET', '/mes-personnages', [CharacterController::class, 'index']);
 $router->add('GET', '/creer-personnage', [CharacterController::class, 'create']);
+$router->add('GET', '/personnage', [CharacterController::class, 'show']);
 $router->add('POST', '/creer-personnage', [CharacterController::class, 'store']);
 $router->add('GET', '/supprimer-personnage', [CharacterController::class, 'delete']);
 
@@ -44,6 +46,12 @@ $router->add('GET', '/admin/accessoires', [AccessoryController::class, 'index'])
 $router->add('GET', '/admin/accessoires/nouveau', [AccessoryController::class, 'create']);
 $router->add('POST', '/admin/accessoires/nouveau', [AccessoryController::class, 'store']);
 $router->add('GET', '/admin/accessoires/supprimer', [AccessoryController::class, 'delete']);
+
+// Routes Avis
+$router->add('POST', '/avis/nouveau', [ReviewController::class, 'store']);
+$router->add('GET', '/admin/avis', [ReviewController::class, 'adminIndex']);
+$router->add('GET', '/admin/avis/approuver', [ReviewController::class, 'approve']);
+$router->add('GET', '/admin/avis/supprimer', [ReviewController::class, 'delete']);
 
 // Dispatching de la requête entrante
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
