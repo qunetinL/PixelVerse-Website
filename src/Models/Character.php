@@ -166,4 +166,33 @@ class Character
             return false;
         }
     }
+
+    /**
+     * Récupère les personnages en attente de validation
+     */
+    public function getPending(): array
+    {
+        $sql = "SELECT c.*, u.pseudo as user_pseudo 
+                FROM characters c 
+                JOIN users u ON c.user_id = u.id 
+                WHERE c.status = 'pending' AND c.deleted_at IS NULL 
+                ORDER BY c.created_at ASC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Met à jour le statut d'un personnage
+     */
+    public function updateStatus(int $id, string $status, ?string $reason = null): bool
+    {
+        $sql = "UPDATE characters SET status = :status, rejection_reason = :reason WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            'id' => $id,
+            'status' => $status,
+            'reason' => $reason
+        ]);
+    }
 }

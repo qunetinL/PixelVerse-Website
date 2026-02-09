@@ -3,7 +3,7 @@
         <h1>FantasyRealm Online</h1>
         <p>Forge your destiny. Create your legend.</p>
         <div class="hero-btns">
-            <a href="/creer-perso" class="btn btn-primary">
+            <a href="/creer-personnage" class="btn btn-primary">
                 <i class="fas fa-plus-circle"></i> Créer mon Personnage
             </a>
             <a href="/en-savoir-plus" class="btn btn-outline">

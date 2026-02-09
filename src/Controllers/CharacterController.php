@@ -152,4 +152,64 @@ class CharacterController extends BaseController
             'hasVoted' => $hasVoted
         ]);
     }
+
+    /**
+     * Liste des personnages en attente de modération (Admin/Employé)
+     */
+    public function adminIndex()
+    {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['admin', 'employe'])) {
+            header('Location: /mes-personnages?error=acces_refuse');
+            exit;
+        }
+
+        $pending = $this->characterModel->getPending();
+
+        $this->render('admin/characters', [
+            'title' => 'Modération des Personnages - PixelVerse',
+            'characters' => $pending
+        ]);
+    }
+
+    /**
+     * Approuve un personnage
+     */
+    public function approve()
+    {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['admin', 'employe'])) {
+            header('Location: /');
+            exit;
+        }
+
+        $id = $_GET['id'] ?? null;
+        if ($id && $this->characterModel->updateStatus((int) $id, 'approved')) {
+            header('Location: /admin/personnages?success=personnage_approuve');
+            exit;
+        }
+
+        header('Location: /admin/personnages?error=erreur');
+        exit;
+    }
+
+    /**
+     * Refuse un personnage
+     */
+    public function reject()
+    {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['admin', 'employe'])) {
+            header('Location: /');
+            exit;
+        }
+
+        $id = $_POST['id'] ?? null;
+        $reason = $_POST['reason'] ?? '';
+
+        if ($id && $this->characterModel->updateStatus((int) $id, 'rejected', $reason)) {
+            header('Location: /admin/personnages?success=personnage_refuse');
+            exit;
+        }
+
+        header('Location: /admin/personnages?error=erreur');
+        exit;
+    }
 }

@@ -7,7 +7,7 @@
     <title>
         <?php echo $title ?? 'PixelVerse Studios'; ?>
     </title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.css?v=1.1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -22,12 +22,14 @@
             </button>
             <nav id="main-nav">
                 <ul>
-                    <li><a href="/" class="active">Accueil</a></li>
-                    <li><a href="/galerie">Galerie</a></li>
+                    <li><a href="/" class="nav-link">Accueil</a></li>
+                    <li><a href="/galerie" class="nav-link">Galerie</a></li>
+                    <li><a href="/contact" class="nav-link">Contact</a></li>
                     <?php if (isset($_SESSION['user'])): ?>
                         <?php if (in_array($_SESSION['user']['role'], ['admin', 'employe'])): ?>
                             <li><a href="/admin/accessoires" class="nav-link admin-highlight">Admin</a></li>
-                            <li><a href="/admin/avis" class="nav-link admin-highlight">Modération</a></li>
+                            <li><a href="/admin/personnages" class="nav-link admin-highlight">Modération Persos</a></li>
+                            <li><a href="/admin/avis" class="nav-link admin-highlight">Modération Avis</a></li>
                         <?php endif; ?>
                         <li><a href="/creer-personnage" class="nav-link standout">Créer Perso</a></li>
                         <li><a href="/mes-personnages" class="nav-link">Mes Persos</a></li>
@@ -40,7 +42,6 @@
                             </div>
                         </li>
                     <?php else: ?>
-                        <li><a href="/contact">Contact</a></li>
                         <li><a href="/connexion" class="btn-connexion">Connexion</a></li>
                     <?php endif; ?>
                 </ul>
