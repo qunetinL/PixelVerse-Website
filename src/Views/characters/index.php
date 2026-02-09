@@ -17,6 +17,17 @@
         </div>
     <?php endif; ?>
 
+    <?php if (isset($_GET['error'])): ?>
+        <div class="alert alert-danger">
+            <?php
+            if ($_GET['error'] === 'suppression_impossible')
+                echo "Impossible de supprimer ce personnage.";
+            if ($_GET['error'] === 'acces_refuse')
+                echo "Vous n'avez pas le droit d'effectuer cette action.";
+            ?>
+        </div>
+    <?php endif; ?>
+
     <?php if (empty($characters)): ?>
         <div class="empty-state">
             <i class="fas fa-ghost fa-3x"></i>
@@ -31,6 +42,9 @@
                         <span class="badge badge-<?= $char['status'] ?>">
                             <?= ucfirst($char['status']) ?>
                         </span>
+                        <a href="/personnage?id=<?= $char['id'] ?>" class="card-overlay" title="Voir la fiche">
+                            <i class="fas fa-eye"></i>
+                        </a>
                     </div>
                     <div class="card-info">
                         <h3>
@@ -41,8 +55,8 @@
                             <?= ucfirst($char['hair_style']) ?>
                         </p>
                         <div class="card-actions">
-                            <a href="/creer-personnage?id=<?= $char['id'] ?>" class="btn-icon" title="Modifier">
-                                <i class="fas fa-edit"></i>
+                            <a href="/personnage?id=<?= $char['id'] ?>" class="btn-icon" title="Voir">
+                                <i class="fas fa-eye"></i>
                             </a>
                             <a href="/supprimer-personnage?id=<?= $char['id'] ?>" class="btn-icon text-danger"
                                 onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce personnage ?')"
@@ -124,9 +138,30 @@
 
     .card-info {
         padding: 20px;
+        position: relative;
     }
 
-    .card-info h3 {
+    .card-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(var(--color-primary-rgb), 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .card-image:hover .card-overlay {
+        opacity: 1;
+    }
+
+    .card-actions {
         margin: 0 0 10px 0;
         color: var(--color-text);
     }

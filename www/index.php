@@ -15,6 +15,7 @@ use PixelVerseApp\Controllers\AuthController;
 use PixelVerseApp\Controllers\CharacterController;
 use PixelVerseApp\Controllers\AccessoryController;
 use PixelVerseApp\Controllers\ReviewController;
+use PixelVerseApp\Controllers\PageController;
 
 // Initialisation de l'autoloader
 Autoloader::register();
@@ -24,6 +25,11 @@ $router = new Router();
 
 // Définition des routes de l'application
 $router->add('GET', '/', [HomeController::class, 'index']);
+$router->add('GET', '/galerie', [PageController::class, 'galerie']);
+$router->add('GET', '/contact', [PageController::class, 'contact']);
+$router->add('GET', '/mentions-legales', [PageController::class, 'mentionsLegales']);
+$router->add('GET', '/cgv', [PageController::class, 'cgv']);
+$router->add('GET', '/en-savoir-plus', [PageController::class, 'enSavoirPlus']);
 
 // Routes Portier (Authentification)
 $router->add('GET', '/connexion', [AuthController::class, 'showLogin']);
@@ -40,6 +46,10 @@ $router->add('GET', '/creer-personnage', [CharacterController::class, 'create'])
 $router->add('GET', '/personnage', [CharacterController::class, 'show']);
 $router->add('POST', '/creer-personnage', [CharacterController::class, 'store']);
 $router->add('GET', '/supprimer-personnage', [CharacterController::class, 'delete']);
+
+$router->add('GET', '/admin/personnages', [CharacterController::class, 'adminIndex']);
+$router->add('GET', '/admin/personnages/approuver', [CharacterController::class, 'approve']);
+$router->add('POST', '/admin/personnages/refuser', [CharacterController::class, 'reject']);
 
 // Routes Administration (Accessoires)
 $router->add('GET', '/admin/accessoires', [AccessoryController::class, 'index']);
