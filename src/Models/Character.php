@@ -197,17 +197,35 @@ class Character
     }
 
     /**
-     * Récupère tous les personnages approuvés
+     * Récupère les personnages approuvés avec des filtres dynamiques
      */
-    public function getApproved(): array
+    public function getFilteredApproved(array $filters = []): array
     {
         $sql = "SELECT c.*, u.pseudo as user_pseudo 
                 FROM characters c 
                 JOIN users u ON c.user_id = u.id 
-                WHERE c.status = 'approved' AND c.deleted_at IS NULL 
-                ORDER BY c.created_at DESC";
+                WHERE c.status = 'approved' AND c.deleted_at IS NULL";
+
+        $params = [];
+
+        // Filtre par genre
+        if (!empty($filters['gender'])) {
+            $sql .= " AND c.gender = :gender";
+            $params['gender'] = $filters['gender'];
+        }
+
+        // Filtre par pseudo (recherche partielle)
+        if (!empty($filters['pseudo'])) {
+            $sql .= " AND u.pseudo LIKE :pseudo";
+            $params['pseudo'] = '%' . $filters['pseudo'] . '%';
+        }
+
+        // Tri par date
+        $sort = $filters['sort'] ?? 'desc';
+        $sql .= " ORDER BY c.created_at " . ($sort === 'asc' ? 'ASC' : 'DESC');
+
         $stmt = $this->db->prepare($sql);
-        $stmt->execute();
+        $stmt->execute($params);
         return $stmt->fetchAll();
     }
 }

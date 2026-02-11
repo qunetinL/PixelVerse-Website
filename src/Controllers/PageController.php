@@ -15,11 +15,18 @@ class PageController extends BaseController
 
     public function galerie()
     {
-        $characters = $this->characterModel->getApproved();
+        $filters = [
+            'gender' => $_GET['gender'] ?? '',
+            'pseudo' => $_GET['pseudo'] ?? '',
+            'sort' => $_GET['sort'] ?? 'desc'
+        ];
+
+        $characters = $this->characterModel->getFilteredApproved($filters);
 
         $this->render('pages/galerie', [
             'title' => 'Galerie des Personnages - PixelVerse',
-            'characters' => $characters
+            'characters' => $characters,
+            'filters' => $filters
         ]);
     }
 

@@ -4,6 +4,40 @@
         <p class="lead text-dim">Découvrez les légendes forgées par notre communauté.</p>
     </div>
 
+    <!-- Filtres -->
+    <div class="gallery-filters mb-5">
+        <form action="/galerie" method="GET" class="filter-form">
+            <div class="filter-group">
+                <label for="gender">Genre</label>
+                <select name="gender" id="gender">
+                    <option value="">Tous les genres</option>
+                    <option value="homme" <?= ($filters['gender'] ?? '') === 'homme' ? 'selected' : '' ?>>Homme</option>
+                    <option value="femme" <?= ($filters['gender'] ?? '') === 'femme' ? 'selected' : '' ?>>Femme</option>
+                    <option value="autre" <?= ($filters['gender'] ?? '') === 'autre' ? 'selected' : '' ?>>Autre</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="pseudo">Pseudo du créateur</label>
+                <input type="text" name="pseudo" id="pseudo" placeholder="Rechercher..."
+                    value="<?= htmlspecialchars($filters['pseudo'] ?? '') ?>">
+            </div>
+            <div class="filter-group">
+                <label for="sort">Tri par date</label>
+                <select name="sort" id="sort">
+                    <option value="desc" <?= ($filters['sort'] ?? '') === 'desc' ? 'selected' : '' ?>>Le plus récent
+                    </option>
+                    <option value="asc" <?= ($filters['sort'] ?? '') === 'asc' ? 'selected' : '' ?>>Le plus ancien</option>
+                </select>
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filtrer</button>
+                <?php if (!empty($filters['gender']) || !empty($filters['pseudo']) || ($filters['sort'] ?? 'desc') !== 'desc'): ?>
+                    <a href="/galerie" class="btn btn-outline btn-sm">Réinitialiser</a>
+                <?php endif; ?>
+            </div>
+        </form>
+    </div>
+
     <?php if (empty($characters)): ?>
         <div class="text-center py-5">
             <i class="fas fa-users-slash fa-4x mb-3 text-muted"></i>
@@ -50,6 +84,64 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 30px;
+    }
+
+    /* Styles Filtres */
+    .gallery-filters {
+        background: #1a1a1a;
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid #333;
+    }
+
+    .filter-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: flex-end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .filter-group label {
+        font-size: 0.85rem;
+        color: var(--color-text-dim);
+        font-weight: 500;
+    }
+
+    .filter-group select,
+    .filter-group input {
+        background: #121212;
+        border: 1px solid #444;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        width: 100%;
+    }
+
+    .filter-actions {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 2px;
+    }
+
+    .btn-outline {
+        border: 1px solid #444;
+        background: transparent;
+        color: var(--color-text-dim);
+    }
+
+    .btn-outline:hover {
+        background: #333;
+        color: white;
     }
 
     .character-card {
