@@ -48,12 +48,12 @@
                     <div class="form-group flex-1">
                         <label for="nom">Nom</label>
                         <input type="text" id="nom" name="nom" required placeholder="Votre nom complet"
-                            value="<?= isset($_SESSION['user']) ? htmlspecialchars($_SESSION['user']['pseudo']) : '' ?>">
+                            value="<?= htmlspecialchars($_SESSION['user']['pseudo'] ?? '') ?>">
                     </div>
                     <div class="form-group flex-1">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" required placeholder="votre@email.com"
-                            value="<?= isset($_SESSION['user']) ? htmlspecialchars($_SESSION['user']['email']) : '' ?>">
+                            value="<?= htmlspecialchars($_SESSION['user']['email'] ?? '') ?>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -70,7 +70,7 @@
                     <textarea id="message" name="message" required
                         placeholder="Comment pouvons-nous vous aider ?"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary btn-lg btn-block">
+                <button type="submit" class="btn btn-primary btn-lg w-100">
                     <i class="fas fa-paper-plane"></i> Envoyer le message
                 </button>
             </form>
