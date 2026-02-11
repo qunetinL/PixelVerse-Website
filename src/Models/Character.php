@@ -195,4 +195,19 @@ class Character
             'reason' => $reason
         ]);
     }
+
+    /**
+     * Récupère tous les personnages approuvés
+     */
+    public function getApproved(): array
+    {
+        $sql = "SELECT c.*, u.pseudo as user_pseudo 
+                FROM characters c 
+                JOIN users u ON c.user_id = u.id 
+                WHERE c.status = 'approved' AND c.deleted_at IS NULL 
+                ORDER BY c.created_at DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }

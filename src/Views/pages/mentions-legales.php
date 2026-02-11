@@ -1,77 +1,66 @@
-<div class="static-page-container container">
-    <div class="construction-content">
-        <i class="fas fa-tools fa-4x mb-4 text-primary"></i>
-        <h1>Page en construction</h1>
-        <p class="lead">Cette fonctionnalité sera bientôt disponible ! Revenez plus tard.</p>
-        <a href="/" class="btn btn-primary mt-4">
-            <i class="fas fa-home"></i> Retour à l'accueil
-        </a>
+<div class="container py-5">
+    <div class="legal-content bg-card p-5 rounded shadow-sm border border-light">
+        <h1 class="mb-4">Mentions Légales</h1>
+
+        <section class="mb-5">
+            <h3>1. Présentation du site</h3>
+            <p>En vertu de l'article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie
+                numérique, il est précisé aux utilisateurs du site PixelVerse l'identité des différents intervenants
+                dans le cadre de sa réalisation et de son suivi :</p>
+            <ul>
+                <li><strong>Propriétaire :</strong> PixelVerse Studios SAS – 123 rue de l'Imaginaire, 75000 Paris</li>
+                <li><strong>Responsable publication :</strong> Jane Doe – contact@pixelverse.com</li>
+                <li><strong>Hébergeur :</strong> CloudServer – 456 Route du Cloud, 69000 Lyon</li>
+            </ul>
+        </section>
+
+        <section class="mb-5">
+            <h3>2. Conditions générales d’utilisation du site et des services proposés</h3>
+            <p>L’utilisation du site PixelVerse implique l’acceptation pleine et entière des conditions générales
+                d’utilisation ci-après décrites. Ces conditions d’utilisation sont susceptibles d’être modifiées ou
+                complétées à tout moment, les utilisateurs du site PixelVerse sont donc invités à les consulter de
+                manière régulière.</p>
+        </section>
+
+        <section class="mb-5">
+            <h3>3. Description des services fournis</h3>
+            <p>Le site PixelVerse a pour objet de fournir une information concernant l’ensemble des activités de la
+                société. PixelVerse Studios s’efforce de fournir sur le site des informations aussi précises que
+                possible.</p>
+        </section>
+
+        <section class="mb-5">
+            <h3>4. Propriété intellectuelle et contrefaçons</h3>
+            <p>PixelVerse Studios est propriétaire des droits de propriété intellectuelle ou détient les droits d’usage
+                sur tous les éléments accessibles sur le site, notamment les textes, images, graphismes, logo, icônes,
+                sons, logiciels.</p>
+        </section>
+
+        <section class="mb-5">
+            <h3>5. Gestion des données personnelles</h3>
+            <p>En France, les données personnelles sont notamment protégées par la loi n° 78-87 du 6 janvier 1978, la
+                loi n° 2004-801 du 6 août 2004, l'article L. 226-13 du Code pénal et la Directive Européenne du 24
+                octobre 1995. PixelVerse s'engage à respecter le RGPD dans le traitement de vos données.</p>
+        </section>
     </div>
 </div>
 
 <style>
-    .static-page-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 60px 20px;
-        text-align: center;
-        min-height: 60vh;
-        /* Fallback for older browsers */
+    .bg-card {
+        background: var(--color-bg-card);
+        border-color: #333 !important;
     }
 
-    .construction-content {
-        max-width: 600px;
-        width: 100%;
-        animation: fadeIn 0.8s ease-out;
+    .legal-content h3 {
+        color: var(--color-secondary);
+        margin-top: 30px;
     }
 
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .mb-4 {
-        margin-bottom: 25px;
-    }
-
-    .mt-4 {
-        margin-top: 25px;
-    }
-
-    .lead {
+    .legal-content section {
         color: var(--color-text-dim);
-        font-size: 1.1rem;
-        margin-bottom: 30px;
-        max-width: 450px;
-        margin-left: auto;
-        margin-right: auto;
     }
 
-    @media (max-width: 576px) {
-        .static-page-container {
-            padding: 40px 15px;
-        }
-
-        h1 {
-            font-size: 1.6rem;
-        }
-
-        .lead {
-            font-size: 1rem;
-        }
-
-        .fas.fa-4x {
-            font-size: 3rem;
-        }
+    .legal-content strong {
+        color: var(--color-text);
     }
 </style>

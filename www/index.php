@@ -27,6 +27,7 @@ $router = new Router();
 $router->add('GET', '/', [HomeController::class, 'index']);
 $router->add('GET', '/galerie', [PageController::class, 'galerie']);
 $router->add('GET', '/contact', [PageController::class, 'contact']);
+$router->add('POST', '/contact', [PageController::class, 'submitContact']);
 $router->add('GET', '/mentions-legales', [PageController::class, 'mentionsLegales']);
 $router->add('GET', '/cgv', [PageController::class, 'cgv']);
 $router->add('GET', '/en-savoir-plus', [PageController::class, 'enSavoirPlus']);
