@@ -86,11 +86,20 @@ class AuthController extends BaseController
             ]);
         }
 
-        // Vérification de l'existence de l'utilisateur
+        // Vérification de l'existence de l'utilisateur (Email)
         if ($this->userModel->findByEmail($data['email'])) {
             return $this->render('auth/register', [
                 'title' => 'Inscription - PixelVerse',
                 'error' => 'Cet email est déjà utilisé.',
+                'data' => $data
+            ]);
+        }
+
+        // Vérification de l'existence de l'utilisateur (Pseudo)
+        if ($this->userModel->findByPseudo($data['pseudo'])) {
+            return $this->render('auth/register', [
+                'title' => 'Inscription - PixelVerse',
+                'error' => 'Ce pseudo est déjà utilisé.',
                 'data' => $data
             ]);
         }
