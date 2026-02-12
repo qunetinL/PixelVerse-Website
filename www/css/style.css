@@ -19,6 +19,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scrollbar-gutter: stable;
+}
+
 body {
     background-color: var(--color-bg-global);
     color: var(--color-text);
@@ -61,6 +65,7 @@ ul {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    width: 100%;
 }
 
 /* Header */
@@ -174,9 +179,11 @@ nav a.active {
 /* Features Section */
 .features {
     padding: 60px 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 30px;
+    width: 100%;
 }
 
 .card {
@@ -185,6 +192,8 @@ nav a.active {
     border-radius: 8px;
     text-align: center;
     transition: var(--transition);
+    flex: 1 1 300px;
+    max-width: 350px;
 }
 
 .card:hover {
@@ -198,9 +207,13 @@ nav a.active {
     color: var(--color-secondary);
 }
 
-.card h3 {
+.card h3,
+.card h2 {
     margin-bottom: 15px;
     font-size: 1.3rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .card p {
@@ -309,8 +322,46 @@ footer {
 }
 
 @media (max-width: 768px) {
+    .hero {
+        padding: 60px 0 30px;
+    }
+
     .hero h1 {
         font-size: 2.5rem;
+    }
+
+    .hero-btns {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .hero-btns .btn {
+        width: 100%;
+        max-width: 320px;
+        justify-content: center;
+    }
+
+    .features {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 100%;
+        flex: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .card h2 {
+        font-size: 1.1rem;
     }
 }
 
@@ -327,4 +378,22 @@ footer {
 .nav-link.admin-highlight:hover {
     background: rgba(241, 196, 15, 0.1);
     box-shadow: 0 0 10px rgba(241, 196, 15, 0.2);
+}
+
+.standout {
+    color: var(--color-secondary) !important;
+    font-weight: bold;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 5px 15px;
+    border-radius: 20px;
+}
+
+.logout-icon {
+    color: #e74c3c;
 }
