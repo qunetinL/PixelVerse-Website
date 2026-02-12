@@ -2,9 +2,9 @@
     <div class="card-icon">
         <i class="<?php echo $icon; ?>"></i>
     </div>
-    <h3>
+    <h2>
         <?php echo $title; ?>
-    </h3>
+    </h2>
     <p>
         <?php echo $description; ?>
     </p>

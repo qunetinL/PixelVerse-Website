@@ -45,15 +45,18 @@
             <a href="/creer-personnage" class="btn btn-primary mt-3">Créer mon personnage</a>
         </div>
     <?php else: ?>
+        <h2 class="sr-only">Liste des Héros</h2>
         <div class="character-grid">
             <?php foreach ($characters as $char): ?>
                 <div class="character-card">
                     <div class="card-preview">
                         <!-- Simulation de l'apparence -->
-                        <div class="mini-avatar" style="background: <?= $char['skin_color'] ?>">
+                        <div class="mini-avatar" style="background: <?= $char['skin_color'] ?>"
+                            aria-label="Avatar de <?= htmlspecialchars($char['name']) ?>, genre <?= $char['gender'] ?>">
                             <div class="mini-hair <?= $char['hair_style'] ?>"></div>
                         </div>
-                        <a href="/personnage?id=<?= $char['id'] ?>" class="card-overlay">
+                        <a href="/personnage?id=<?= $char['id'] ?>" class="card-overlay"
+                            aria-label="Voir le profil détaillé de <?= htmlspecialchars($char['name']) ?>">
                             <i class="fas fa-eye"></i> Voir le profil
                         </a>
                     </div>

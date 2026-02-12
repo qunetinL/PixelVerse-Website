@@ -17,7 +17,7 @@
             <a href="/" class="logo">
                 <i class="fas fa-gamepad"></i> PIXELVERSE
             </a>
-            <button class="menu-toggle" aria-label="Ouvrir le menu">
+            <button class="menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
                 <i class="fas fa-bars"></i>
             </button>
             <nav id="main-nav">
@@ -60,6 +60,11 @@
                 <a href="/mentions-legales">Mentions Légales</a>
                 <a href="/cgv">CGV</a>
             </div>
+            <div class="social-links-footer mt-3">
+                <a href="#" aria-label="Suivez-nous sur Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Rejoignez notre Discord"><i class="fab fa-discord"></i></a>
+                <a href="#" aria-label="Voir notre code sur GitHub"><i class="fab fa-github"></i></a>
+            </div>
             <?php if (isset($dbStatus)): ?>
                 <p style="margin-top:10px; font-size: 0.7rem;">DB Status:
                     <?php echo $dbStatus; ?>
@@ -69,10 +74,16 @@
     </footer>
 
     <script>
-        document.querySelector('.menu-toggle').addEventListener('click', function () {
-            document.getElementById('main-nav').classList.toggle('active');
+        const menuToggle = document.querySelector('.menu-toggle');
+        const mainNav = document.getElementById('main-nav');
+
+        menuToggle.addEventListener('click', function () {
+            const isActive = mainNav.classList.toggle('active');
+            this.setAttribute('aria-expanded', isActive);
+            this.setAttribute('aria-label', isActive ? 'Fermer le menu' : 'Ouvrir le menu');
+
             const icon = this.querySelector('i');
-            if (icon.classList.contains('fa-bars')) {
+            if (isActive) {
                 icon.classList.replace('fa-bars', 'fa-xmark');
             } else {
                 icon.classList.replace('fa-xmark', 'fa-bars');

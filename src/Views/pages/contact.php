@@ -9,29 +9,29 @@
             <div class="info-item">
                 <i class="fas fa-map-marker-alt"></i>
                 <div>
-                    <h3>Localisation</h3>
+                    <h2>Localisation</h2>
                     <p>Pixel Street, 75000 Paris, France</p>
                 </div>
             </div>
             <div class="info-item">
                 <i class="fas fa-envelope"></i>
                 <div>
-                    <h3>Email</h3>
+                    <h2>Email</h2>
                     <p>contact@pixelverse.com</p>
                 </div>
             </div>
             <div class="info-item">
                 <i class="fas fa-phone"></i>
                 <div>
-                    <h3>Téléphone</h3>
+                    <h2>Téléphone</h2>
                     <p>+33 1 23 45 67 89</p>
                 </div>
             </div>
 
             <div class="social-links mt-4">
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-discord"></i></a>
-                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#" aria-label="Suivez-nous sur Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Rejoignez notre Discord"><i class="fab fa-discord"></i></a>
+                <a href="#" aria-label="Voir notre code sur GitHub"><i class="fab fa-github"></i></a>
             </div>
         </div>
 
