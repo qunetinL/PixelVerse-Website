@@ -212,4 +212,39 @@ class CharacterController extends BaseController
         header('Location: /admin/personnages?error=erreur');
         exit;
     }
+
+    /**
+     * Duplique un personnage
+     */
+    public function duplicate()
+    {
+        $id = $_GET['id'] ?? null;
+        $userId = $_SESSION['user']['id'];
+
+        if (!$id) {
+            header('Location: /mes-personnages');
+            exit;
+        }
+
+        $char = $this->characterModel->getById((int) $id);
+        if (!$char || $char['user_id'] !== $userId) {
+            header('Location: /mes-personnages?error=acces_refuse');
+            exit;
+        }
+
+        $newName = $char['name'] . ' (Copie)';
+
+        // S'il existe déjà une copie avec ce nom, on ajoute un timestamp ou un random
+        if ($this->characterModel->nameExists($newName)) {
+            $newName = $char['name'] . ' (Copie ' . date('His') . ')';
+        }
+
+        if ($this->characterModel->duplicate((int) $id, $userId, $newName)) {
+            header('Location: /mes-personnages?success=personnage_duplique');
+            exit;
+        }
+
+        header('Location: /mes-personnages?error=erreur_duplication');
+        exit;
+    }
 }

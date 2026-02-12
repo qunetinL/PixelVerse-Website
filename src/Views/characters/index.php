@@ -13,6 +13,8 @@
                 echo "Votre personnage a été créé et est en attente de validation.";
             if ($_GET['success'] === 'personnage_supprime')
                 echo "Personnage supprimé avec succès.";
+            if ($_GET['success'] === 'personnage_duplique')
+                echo "Personnage dupliqué avec succès. Il est en attente de validation.";
             ?>
         </div>
     <?php endif; ?>
@@ -24,6 +26,8 @@
                 echo "Impossible de supprimer ce personnage.";
             if ($_GET['error'] === 'acces_refuse')
                 echo "Vous n'avez pas le droit d'effectuer cette action.";
+            if ($_GET['error'] === 'erreur_duplication')
+                echo "Une erreur est survenue lors de la duplication.";
             ?>
         </div>
     <?php endif; ?>
@@ -57,6 +61,9 @@
                         <div class="card-actions">
                             <a href="/personnage?id=<?= $char['id'] ?>" class="btn-icon" title="Voir">
                                 <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="/dupliquer-personnage?id=<?= $char['id'] ?>" class="btn-icon" title="Dupliquer">
+                                <i class="fas fa-copy"></i>
                             </a>
                             <a href="/supprimer-personnage?id=<?= $char['id'] ?>" class="btn-icon text-danger"
                                 onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce personnage ?')"

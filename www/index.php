@@ -47,6 +47,7 @@ $router->add('GET', '/creer-personnage', [CharacterController::class, 'create'])
 $router->add('GET', '/personnage', [CharacterController::class, 'show']);
 $router->add('POST', '/creer-personnage', [CharacterController::class, 'store']);
 $router->add('GET', '/supprimer-personnage', [CharacterController::class, 'delete']);
+$router->add('GET', '/dupliquer-personnage', [CharacterController::class, 'duplicate']);
 
 $router->add('GET', '/admin/personnages', [CharacterController::class, 'adminIndex']);
 $router->add('GET', '/admin/personnages/approuver', [CharacterController::class, 'approve']);
