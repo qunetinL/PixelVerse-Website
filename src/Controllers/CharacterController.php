@@ -5,11 +5,13 @@ namespace PixelVerseApp\Controllers;
 use PixelVerseApp\Models\Character;
 use PixelVerseApp\Models\Accessory;
 use PixelVerseApp\Models\Review;
+use PixelVerseApp\Models\LogManager;
 use PixelVerseApp\Core\Database;
 
 class CharacterController extends BaseController
 {
     private $characterModel;
+    private $logManager;
 
     public function __construct()
     {
@@ -19,6 +21,7 @@ class CharacterController extends BaseController
             exit;
         }
         $this->characterModel = new Character();
+        $this->logManager = new LogManager();
     }
 
     /**
@@ -86,6 +89,12 @@ class CharacterController extends BaseController
             if (isset($_POST['accessories']) && is_array($_POST['accessories'])) {
                 $this->characterModel->syncAccessories($charId, $_POST['accessories']);
             }
+
+            // Log de l'action
+            $this->logManager->log((string) $userId, 'creation_personnage', [
+                'name' => $data['name'],
+                'id' => $charId
+            ]);
 
             header('Location: /mes-personnages?success=personnage_cree');
             exit;
@@ -183,6 +192,10 @@ class CharacterController extends BaseController
 
         $id = $_GET['id'] ?? null;
         if ($id && $this->characterModel->updateStatus((int) $id, 'approved')) {
+            // Log de l'action
+            $this->logManager->log((string) $_SESSION['user']['id'], 'approbation_personnage', [
+                'id' => $id
+            ]);
             header('Location: /admin/personnages?success=personnage_approuve');
             exit;
         }
@@ -205,6 +218,11 @@ class CharacterController extends BaseController
         $reason = $_POST['reason'] ?? '';
 
         if ($id && $this->characterModel->updateStatus((int) $id, 'rejected', $reason)) {
+            // Log de l'action
+            $this->logManager->log((string) $_SESSION['user']['id'], 'rejet_personnage', [
+                'id' => $id,
+                'reason' => $reason
+            ]);
             header('Location: /admin/personnages?success=personnage_refuse');
             exit;
         }
@@ -240,6 +258,11 @@ class CharacterController extends BaseController
         }
 
         if ($this->characterModel->duplicate((int) $id, $userId, $newName)) {
+            // Log de l'action
+            $this->logManager->log((string) $userId, 'duplication_personnage', [
+                'source_id' => $id,
+                'new_name' => $newName
+            ]);
             header('Location: /mes-personnages?success=personnage_duplique');
             exit;
         }

@@ -3,19 +3,22 @@
 namespace PixelVerseApp\Controllers;
 
 use PixelVerseApp\Models\Accessory;
+use PixelVerseApp\Models\LogManager;
 
 class AccessoryController extends BaseController
 {
     private $accessoryModel;
+    private $logManager;
 
     public function __construct()
     {
-        // Protection : l'utilisateur doit être admin ou employe
+        // Protection Admin : Seuls les admins et employés peuvent gérer les accessoires
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['admin', 'employe'])) {
-            header('Location: /connexion');
+            header('Location: /');
             exit;
         }
         $this->accessoryModel = new Accessory();
+        $this->logManager = new LogManager();
     }
 
     /**
@@ -53,6 +56,11 @@ class AccessoryController extends BaseController
         ];
 
         if ($this->accessoryModel->create($data)) {
+            // Log de l'action
+            $this->logManager->log((string) $_SESSION['user']['id'], 'creation_accessoire', [
+                'name' => $data['name'],
+                'type' => $data['type']
+            ]);
             header('Location: /admin/accessoires?success=accessoire_cree');
             exit;
         }
@@ -71,6 +79,10 @@ class AccessoryController extends BaseController
     {
         $id = $_GET['id'] ?? null;
         if ($id && $this->accessoryModel->delete((int) $id)) {
+            // Log de l'action
+            $this->logManager->log((string) $_SESSION['user']['id'], 'suppression_accessoire', [
+                'id' => $id
+            ]);
             header('Location: /admin/accessoires?success=accessoire_supprime');
             exit;
         }

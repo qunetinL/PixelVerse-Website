@@ -30,6 +30,7 @@
                             <li><a href="/admin/accessoires" class="nav-link admin-highlight">Admin</a></li>
                             <li><a href="/admin/personnages" class="nav-link admin-highlight">Modération Persos</a></li>
                             <li><a href="/admin/avis" class="nav-link admin-highlight">Modération Avis</a></li>
+                            <li><a href="/admin/logs" class="nav-link admin-highlight">Logs NoSQL</a></li>
                         <?php endif; ?>
                         <li><a href="/creer-personnage" class="nav-link standout">Créer Perso</a></li>
                         <li><a href="/mes-personnages" class="nav-link">Mes Persos</a></li>

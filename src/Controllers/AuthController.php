@@ -77,11 +77,30 @@ class AuthController extends BaseController
             'role' => 'joueur' // Rôle par défaut
         ];
 
-        // Validation basique (à compléter pour une prod réelle)
+        // Validation basique
         if (empty($data['pseudo']) || empty($data['email']) || empty($data['password'])) {
             return $this->render('auth/register', [
                 'title' => 'Inscription - PixelVerse',
                 'error' => 'Tous les champs sont obligatoires.',
+                'data' => $data
+            ]);
+        }
+
+        // Vérification RGPD
+        if (!isset($_POST['rgpd'])) {
+            return $this->render('auth/register', [
+                'title' => 'Inscription - PixelVerse',
+                'error' => 'Vous devez accepter la politique de confidentialité (RGPD).',
+                'data' => $data
+            ]);
+        }
+
+        // Validation du mot de passe (CNIL : 12 car, 1 maj, 1 min, 1 chiffre, 1 spécial)
+        $passwordRegex = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/';
+        if (!preg_match($passwordRegex, $data['password'])) {
+            return $this->render('auth/register', [
+                'title' => 'Inscription - PixelVerse',
+                'error' => 'Le mot de passe doit contenir au moins 12 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.',
                 'data' => $data
             ]);
         }

@@ -43,36 +43,38 @@
                 </div>
             <?php endif; ?>
 
-            <form action="/contact" method="POST" class="contact-form">
-                <div class="form-row">
-                    <div class="form-group flex-1">
-                        <label for="nom">Nom</label>
-                        <input type="text" id="nom" name="nom" required placeholder="Votre nom complet"
-                            value="<?= htmlspecialchars($_SESSION['user']['pseudo'] ?? '') ?>">
+            <form action="/contact" method="POST">
+                <?= \PixelVerseApp\Core\Security::csrfInput() ?>
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="nom">Nom</label>
+                            <input type="text" id="nom" name="nom" required placeholder="Votre nom complet"
+                                value="<?= htmlspecialchars($_SESSION['user']['pseudo'] ?? '') ?>">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required placeholder="votre@email.com"
+                                value="<?= htmlspecialchars($_SESSION['user']['email'] ?? '') ?>">
+                        </div>
                     </div>
-                    <div class="form-group flex-1">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required placeholder="votre@email.com"
-                            value="<?= htmlspecialchars($_SESSION['user']['email'] ?? '') ?>">
+                    <div class="form-group">
+                        <label for="sujet">Sujet</label>
+                        <select id="sujet" name="sujet">
+                            <option value="general">Question générale</option>
+                            <option value="bug">Signaler un bug</option>
+                            <option value="partenariat">Partenariat</option>
+                            <option value="autre">Autre</option>
+                        </select>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="sujet">Sujet</label>
-                    <select id="sujet" name="sujet">
-                        <option value="general">Question générale</option>
-                        <option value="bug">Signaler un bug</option>
-                        <option value="partenariat">Partenariat</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" required
-                        placeholder="Comment pouvons-nous vous aider ?"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg w-100">
-                    <i class="fas fa-paper-plane"></i> Envoyer le message
-                </button>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required
+                            placeholder="Comment pouvons-nous vous aider ?"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-paper-plane"></i> Envoyer le message
+                    </button>
             </form>
         </div>
     </div>

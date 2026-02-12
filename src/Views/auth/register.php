@@ -11,6 +11,7 @@
         <?php endif; ?>
 
         <form action="/inscription" method="POST">
+            <?= \PixelVerseApp\Core\Security::csrfInput() ?>
             <div style="margin-bottom: 20px; text-align: left;">
                 <label for="pseudo" style="display: block; margin-bottom: 5px; color: var(--color-text-dim);">Pseudo
                     d'aventurier</label>
@@ -31,12 +32,13 @@
                     passe secret</label>
                 <input type="password" name="password" id="password" required
                     style="width: 100%; padding: 12px; border-radius: 4px; border: 1px solid #444; background: #2a2a2a; color: white;">
-                <small style="color: #666; display: block; margin-top: 5px;">Utilisez au moins 12 caractères pour une
-                    protection maximale.</small>
+                <small style="color: #888; display: block; margin-top: 5px;">
+                    <i class="fas fa-shield-halved"></i> 12 caractères min, Maj, Min, Chiffre, Spécial (@$!%*?&).
+                </small>
             </div>
 
             <div style="margin-bottom: 30px; text-align: left; display: flex; gap: 10px; align-items: flex-start;">
-                <input type="checkbox" id="rgpd" required style="margin-top: 5px;">
+                <input type="checkbox" id="rgpd" name="rgpd" required style="margin-top: 5px;">
                 <label for="rgpd" style="font-size: 0.85rem; color: var(--color-text-dim);">
                     J'accepte que mes données soient stockées pour la gestion de mon compte (RGPD).
                 </label>

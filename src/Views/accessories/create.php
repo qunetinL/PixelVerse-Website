@@ -6,6 +6,7 @@
 
     <div class="admin-form-card">
         <form action="/admin/accessoires/nouveau" method="POST">
+            <?= \PixelVerseApp\Core\Security::csrfInput() ?>
             <div class="form-group">
                 <label for="name">Nom de l'article</label>
                 <input type="text" name="name" id="name" required placeholder="Ex: Épée de Cristal">

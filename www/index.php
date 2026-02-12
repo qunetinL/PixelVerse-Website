@@ -16,6 +16,8 @@ use PixelVerseApp\Controllers\CharacterController;
 use PixelVerseApp\Controllers\AccessoryController;
 use PixelVerseApp\Controllers\ReviewController;
 use PixelVerseApp\Controllers\PageController;
+use PixelVerseApp\Controllers\AdminController;
+use PixelVerseApp\Core\Security;
 
 // Initialisation de l'autoloader
 Autoloader::register();
@@ -58,12 +60,22 @@ $router->add('GET', '/admin/accessoires', [AccessoryController::class, 'index'])
 $router->add('GET', '/admin/accessoires/nouveau', [AccessoryController::class, 'create']);
 $router->add('POST', '/admin/accessoires/nouveau', [AccessoryController::class, 'store']);
 $router->add('GET', '/admin/accessoires/supprimer', [AccessoryController::class, 'delete']);
+$router->add('GET', '/admin/logs', [AdminController::class, 'logs']);
 
 // Routes Avis
 $router->add('POST', '/avis/nouveau', [ReviewController::class, 'store']);
 $router->add('GET', '/admin/avis', [ReviewController::class, 'adminIndex']);
 $router->add('GET', '/admin/avis/approuver', [ReviewController::class, 'approve']);
 $router->add('GET', '/admin/avis/supprimer', [ReviewController::class, 'delete']);
+
+// Protection CSRF globale pour toutes les requêtes POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $token = $_POST['csrf_token'] ?? null;
+    if (!Security::verifyCsrfToken($token)) {
+        http_response_code(403);
+        die("Erreur de sécurité : Jeton CSRF invalide ou manquant.");
+    }
+}
 
 // Dispatching de la requête entrante
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);

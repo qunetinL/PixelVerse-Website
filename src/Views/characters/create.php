@@ -10,6 +10,7 @@
     </div>
 
     <form id="character-form" action="/creer-personnage" method="POST" class="creation-content">
+        <?= \PixelVerseApp\Core\Security::csrfInput() ?>
         <!-- Panneau de gauche : Aperçu -->
         <div class="preview-panel">
             <div class="preview-box">

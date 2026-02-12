@@ -80,6 +80,7 @@
     <div class="modal-content">
         <h3>Refuser le personnage : <span id="rejectCharName"></span></h3>
         <form action="/admin/personnages/refuser" method="POST">
+            <?= \PixelVerseApp\Core\Security::csrfInput() ?>
             <input type="hidden" name="id" id="rejectCharId">
             <div class="form-group">
                 <label for="reason">Raison du refus (sera visible par le joueur) :</label>

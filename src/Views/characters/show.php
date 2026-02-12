@@ -52,6 +52,7 @@
                     <div class="review-form-card">
                         <h3>Laissez un avis</h3>
                         <form action="/avis/nouveau" method="POST">
+                            <?= \PixelVerseApp\Core\Security::csrfInput() ?>
                             <input type="hidden" name="character_id" value="<?= $character['id'] ?>">
                             <div class="form-group">
                                 <label>Note</label>

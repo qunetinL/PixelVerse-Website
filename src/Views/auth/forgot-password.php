@@ -21,6 +21,7 @@
             </div>
         <?php else: ?>
             <form action="/mot-de-passe-oublie" method="POST">
+                <?= \PixelVerseApp\Core\Security::csrfInput() ?>
                 <div style="margin-bottom: 20px; text-align: left;">
                     <label for="email" style="display: block; margin-bottom: 5px; color: var(--color-text-dim);">Adresse
                         Email</label>
