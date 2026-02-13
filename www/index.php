@@ -61,6 +61,11 @@ $router->add('GET', '/admin/accessoires/nouveau', [AccessoryController::class, '
 $router->add('POST', '/admin/accessoires/nouveau', [AccessoryController::class, 'store']);
 $router->add('GET', '/admin/accessoires/supprimer', [AccessoryController::class, 'delete']);
 $router->add('GET', '/admin/logs', [AdminController::class, 'logs']);
+$router->add('GET', '/admin/employes', [AdminController::class, 'employees']);
+$router->add('POST', '/admin/employes/nouveau', [AdminController::class, 'createEmployee']);
+$router->add('POST', '/admin/employes/supprimer', [AdminController::class, 'deleteEmployee']);
+$router->add('GET', '/admin/utilisateurs', [AdminController::class, 'users']);
+$router->add('POST', '/admin/utilisateurs/toggle-suspension', [AdminController::class, 'toggleSuspension']);
 
 // Routes Avis
 $router->add('POST', '/avis/nouveau', [ReviewController::class, 'store']);

@@ -13,6 +13,10 @@
                 echo "L'avis a été publié.";
             if ($_GET['success'] === 'avis_supprime')
                 echo "L'avis a été rejeté.";
+
+            if (isset($_GET['mail_sent'])) {
+                echo " <br><strong>[SIMULATION]</strong> Le propriétaire du personnage a reçu un email de notification.";
+            }
             ?>
         </div>
     <?php endif; ?>

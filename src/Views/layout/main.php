@@ -27,6 +27,10 @@
                     <li><a href="/contact" class="nav-link">Contact</a></li>
                     <?php if (isset($_SESSION['user'])): ?>
                         <?php if (in_array($_SESSION['user']['role'], ['admin', 'employe'])): ?>
+                            <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+                                <li><a href="/admin/employes" class="nav-link admin-highlight">Employés</a></li>
+                            <?php endif; ?>
+                            <li><a href="/admin/utilisateurs" class="nav-link admin-highlight">Utilisateurs</a></li>
                             <li><a href="/admin/accessoires" class="nav-link admin-highlight">Admin</a></li>
                             <li><a href="/admin/personnages" class="nav-link admin-highlight">Modération Persos</a></li>
                             <li><a href="/admin/avis" class="nav-link admin-highlight">Modération Avis</a></li>

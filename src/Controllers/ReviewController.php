@@ -82,7 +82,7 @@ class ReviewController extends BaseController
 
         $id = $_GET['id'] ?? null;
         if ($id && $this->reviewModel->approve((int) $id)) {
-            header('Location: /admin/avis?success=avis_approuve');
+            header('Location: /admin/avis?success=avis_approuve&mail_sent=1');
             exit;
         }
         header('Location: /admin/avis?error=action_impossible');

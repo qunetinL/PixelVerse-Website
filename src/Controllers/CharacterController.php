@@ -196,7 +196,7 @@ class CharacterController extends BaseController
             $this->logManager->log((string) $_SESSION['user']['id'], 'approbation_personnage', [
                 'id' => $id
             ]);
-            header('Location: /admin/personnages?success=personnage_approuve');
+            header('Location: /admin/personnages?success=personnage_approuve&mail_sent=1');
             exit;
         }
 
@@ -223,7 +223,7 @@ class CharacterController extends BaseController
                 'id' => $id,
                 'reason' => $reason
             ]);
-            header('Location: /admin/personnages?success=personnage_refuse');
+            header('Location: /admin/personnages?success=personnage_refuse&mail_sent=1');
             exit;
         }
 
