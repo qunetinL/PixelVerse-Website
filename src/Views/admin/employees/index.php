@@ -1,20 +1,18 @@
 <div class="container admin-container py-5">
-    <div class="admin-header">
-        <h1>Gestion des Employés</h1>
-        <p class="subtitle">Créez et gérez les comptes de modération</p>
+    <div class="admin-header text-center mb-5">
+        <h1 class="display-4 standout-text">Gestion des Employés</h1>
+        <p class="subtitle">Créez et gérez les comptes de modération de la plateforme</p>
     </div>
 
     <?php if (isset($_SESSION['success'])): ?>
         <div class="alert alert-success">
-            <?= $_SESSION['success'];
-            unset($_SESSION['success']); ?>
+            <i class="fas fa-check-circle"></i> <?= $_SESSION['success']; unset($_SESSION['success']); ?>
         </div>
     <?php endif; ?>
 
     <?php if (isset($_SESSION['error'])): ?>
         <div class="alert alert-danger">
-            <?= $_SESSION['error'];
-            unset($_SESSION['error']); ?>
+            <i class="fas fa-exclamation-triangle"></i> <?= $_SESSION['error']; unset($_SESSION['error']); ?>
         </div>
     <?php endif; ?>
 
@@ -25,65 +23,76 @@
     </div>
 
     <div class="admin-card">
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>Pseudo</th>
-                    <th>Email</th>
-                    <th>Date d'inscription</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($employees as $emp): ?>
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
                     <tr>
-                        <td>
-                            <?= htmlspecialchars($emp['pseudo']) ?>
-                        </td>
-                        <td>
-                            <?= htmlspecialchars($emp['email']) ?>
-                        </td>
-                        <td>
-                            <?= date('d/m/Y', strtotime($emp['created_at'])) ?>
-                        </td>
-                        <td>
-                            <form action="/admin/employes/supprimer" method="POST" style="display:inline;"
-                                onsubmit="return confirm('Supprimer cet employé ?');">
-                                <?= \PixelVerseApp\Core\Security::csrfInput() ?>
-                                <input type="hidden" name="id" value="<?= $emp['id'] ?>">
-                                <button type="submit" class="btn-icon delete" title="Supprimer">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
+                        <th>Pseudo</th>
+                        <th>Email</th>
+                        <th>Inscrit le</th>
+                        <th class="text-center">Actions</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php if (empty($employees)): ?>
+                        <tr>
+                            <td colspan="4" class="text-center py-4">Aucun employé trouvé.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($employees as $emp): ?>
+                            <tr>
+                                <td class="font-weight-bold">
+                                    <i class="fas fa-user-tie mr-2 opacity-50"></i>
+                                    <?= htmlspecialchars($emp['pseudo']) ?>
+                                </td>
+                                <td><?= htmlspecialchars($emp['email']) ?></td>
+                                <td>
+                                    <span class="text-muted"><?= date('d/m/Y', strtotime($emp['created_at'])) ?></span>
+                                </td>
+                                <td class="text-center">
+                                    <form action="/admin/employes/supprimer" method="POST" style="display:inline;"
+                                        onsubmit="return confirm('Voulez-vous vraiment supprimer cet employé ?');">
+                                        <?= \PixelVerseApp\Core\Security::csrfInput() ?>
+                                        <input type="hidden" name="id" value="<?= $emp['id'] ?>">
+                                        <button type="submit" class="btn-icon delete" title="Supprimer l'employé">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <!-- Modal Ajout Employé -->
 <div id="addEmployeeModal" class="modal">
-    <div class="modal-content">
-        <h3>Ajouter un nouvel employé</h3>
-        <form action="/admin/employes/nouveau" method="POST">
+    <div class="modal-content animate-slide-down">
+        <div class="modal-header-nav">
+            <h3 class="mb-0">Nouvel Employé</h3>
+            <button class="close-btn" onclick="document.getElementById('addEmployeeModal').style.display='none'">&times;</button>
+        </div>
+        <form action="/admin/employes/nouveau" method="POST" class="mt-4">
             <?= \PixelVerseApp\Core\Security::csrfInput() ?>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="pseudo">Pseudo</label>
-                <input type="text" name="pseudo" id="pseudo" required>
+                <input type="text" name="pseudo" id="pseudo" class="form-control" required placeholder="nom d'utilisateur">
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="email">Adresse Email</label>
-                <input type="email" name="email" id="email" required>
+                <input type="email" name="email" id="email" class="form-control" required placeholder="email@pixelverse.com">
             </div>
-            <div class="form-group">
+            <div class="form-group mb-4">
                 <label for="password">Mot de passe provisoire</label>
-                <input type="password" name="password" id="password" required>
+                <input type="password" name="password" id="password" class="form-control" required>
+                <p class="text-small text-muted mt-1">L'employé devra le changer à sa première connexion.</p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer px-0 pb-0">
                 <button type="button" class="btn btn-outline"
-                    onclick="this.closest('.modal').style.display='none'">Annuler</button>
+                    onclick="document.getElementById('addEmployeeModal').style.display='none'">Annuler</button>
                 <button type="submit" class="btn btn-primary">Créer le compte</button>
             </div>
         </form>
@@ -97,7 +106,8 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
         display: none;
         justify-content: center;
         align-items: center;
@@ -106,35 +116,55 @@
 
     .modal-content {
         background: var(--color-bg-card);
-        padding: 30px;
-        border-radius: 8px;
-        width: 100%;
-        max-width: 450px;
+        padding: 40px;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 500px;
         border: 1px solid var(--color-primary);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
     }
 
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .form-group input {
-        width: 100%;
-        padding: 10px;
-        background: #2a2a2a;
-        border: 1px solid #444;
-        color: white;
-        border-radius: 4px;
-    }
-
-    .modal-footer {
-        margin-top: 20px;
+    .modal-header-nav {
         display: flex;
-        gap: 10px;
-        justify-content: flex-end;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 15px;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 2rem;
+        line-height: 1;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+
+    .close-btn:hover {
+        opacity: 1;
+    }
+
+    .animate-slide-down {
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .form-control {
+        background: rgba(0,0,0,0.2) !important;
+        border: 1px solid #444 !important;
+        color: white !important;
+        padding: 12px !important;
+    }
+
+    .form-control:focus {
+        border-color: var(--color-primary) !important;
+        box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2) !important;
     }
 </style>

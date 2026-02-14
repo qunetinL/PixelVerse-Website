@@ -63,6 +63,13 @@ class AdminController extends BaseController
                 $_SESSION['error'] = "Cet email est déjà utilisé.";
             } else {
                 $userModel->create($data);
+
+                // Log de l'action
+                $this->logManager->log((string) $_SESSION['user']['id'], 'creation_employe', [
+                    'pseudo' => $data['pseudo'],
+                    'email' => $data['email']
+                ]);
+
                 $_SESSION['success'] = "Compte employé créé avec succès.";
             }
         }
@@ -88,6 +95,10 @@ class AdminController extends BaseController
 
             if ($user && $user['role'] === 'employe') {
                 $userModel->delete((int) $id);
+                $this->logManager->log((string) $_SESSION['user']['id'], 'suppression_employe', [
+                    'id' => $id,
+                    'pseudo' => $user['pseudo']
+                ]);
                 $_SESSION['success'] = "Employé supprimé avec succès.";
             }
         }
@@ -118,7 +129,15 @@ class AdminController extends BaseController
         $id = $_POST['id'] ?? null;
         if ($id) {
             $userModel = new \PixelVerseApp\Models\User();
+            $user = $userModel->findById((int) $id);
             $userModel->toggleSuspension((int) $id);
+
+            // Log de l'action
+            $this->logManager->log((string) $_SESSION['user']['id'], 'toggle_suspension_utilisateur', [
+                'target_id' => $id,
+                'target_pseudo' => $user ? $user['pseudo'] : 'Inconnu'
+            ]);
+
             $_SESSION['success'] = "Statut de l'utilisateur mis à jour.";
         }
 

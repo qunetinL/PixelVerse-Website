@@ -67,3 +67,16 @@ CREATE TABLE IF NOT EXISTS avis (
 CREATE INDEX idx_utilisateurs_email ON utilisateurs(email);
 CREATE INDEX idx_personnages_statut ON personnages(statut_validation);
 CREATE INDEX idx_avis_statut ON avis(statut_validation);
+
+-- Default Users
+-- Admin123!
+INSERT INTO utilisateurs (pseudo, email, mot_de_passe, role) VALUES 
+('AdminPixel', 'admin@pixelverse.com', '$argon2id$v=19$m=65536,t=4,p=1$Vno4ZmpDdzdLbFk4OHdtdg$6FH7BtWx3uS6fq9shxFr7k3XEGihp01gX6SwQg1/X5k', 'admin');
+
+-- Password123!
+INSERT INTO utilisateurs (pseudo, email, mot_de_passe, role) VALUES 
+('EmployeJean', 'jean@pixelverse.com', '$argon2id$v=19$m=65536,t=4,p=1$aXZPd2pqeEJucjFPb0VVcQ$maJj4Wzq7/p08nGc13uxdX0CvPvw6t1nQJeuszPdzBo', 'employe');
+
+INSERT INTO utilisateurs (pseudo, email, mot_de_passe, role) VALUES 
+('PlayerOne', 'player1@gmail.com', '$argon2id$v=19$m=65536,t=4,p=1$aXZPd2pqeEJucjFPb0VVcQ$maJj4Wzq7/p08nGc13uxdX0CvPvw6t1nQJeuszPdzBo', 'joueur'),
+('PlayerTwo', 'player2@gmail.com', '$argon2id$v=19$m=65536,t=4,p=1$aXZPd2pqeEJucjFPb0VVcQ$maJj4Wzq7/p08nGc13uxdX0CvPvw6t1nQJeuszPdzBo', 'joueur');
