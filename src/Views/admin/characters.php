@@ -11,6 +11,10 @@
                 echo "Personnage approuvé avec succès.";
             if ($_GET['success'] === 'personnage_refuse')
                 echo "Personnage refusé et l'utilisateur a été notifié.";
+
+            if (isset($_GET['mail_sent'])) {
+                echo " <br><strong>[SIMULATION]</strong> Un email de notification a été envoyé au joueur.";
+            }
             ?>
         </div>
     <?php endif; ?>

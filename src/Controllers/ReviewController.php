@@ -3,14 +3,17 @@
 namespace PixelVerseApp\Controllers;
 
 use PixelVerseApp\Models\Review;
+use PixelVerseApp\Models\LogManager;
 
 class ReviewController extends BaseController
 {
     private $reviewModel;
+    private $logManager;
 
     public function __construct()
     {
         $this->reviewModel = new Review();
+        $this->logManager = new LogManager();
     }
 
     /**
@@ -82,7 +85,11 @@ class ReviewController extends BaseController
 
         $id = $_GET['id'] ?? null;
         if ($id && $this->reviewModel->approve((int) $id)) {
-            header('Location: /admin/avis?success=avis_approuve');
+            // Log de l'action
+            $this->logManager->log((string) $_SESSION['user']['id'], 'approbation_avis', [
+                'id' => $id
+            ]);
+            header('Location: /admin/avis?success=avis_approuve&mail_sent=1');
             exit;
         }
         header('Location: /admin/avis?error=action_impossible');
@@ -100,6 +107,10 @@ class ReviewController extends BaseController
 
         $id = $_GET['id'] ?? null;
         if ($id && $this->reviewModel->delete((int) $id)) {
+            // Log de l'action
+            $this->logManager->log((string) $_SESSION['user']['id'], 'suppression_avis', [
+                'id' => $id
+            ]);
             header('Location: /admin/avis?success=avis_supprime');
             exit;
         }

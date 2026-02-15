@@ -107,4 +107,75 @@ class User
 
         return false;
     }
+
+    /**
+     * Récupère tous les utilisateurs d'un rôle spécifique
+     */
+    public function getAllByRole(string $role)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE role = ? ORDER BY pseudo ASC");
+        $stmt->execute([$role]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Récupère tous les utilisateurs sauf les administrateurs
+     */
+    public function getAllUsers()
+    {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE role != 'admin' ORDER BY pseudo ASC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Met à jour les informations d'un utilisateur
+     */
+    public function update(int $id, array $data)
+    {
+        $fields = [];
+        $params = ['id' => $id];
+
+        foreach ($data as $key => $value) {
+            if ($key === 'password') {
+                $fields[] = "password = :password";
+                $params['password'] = password_hash($value, PASSWORD_ARGON2ID);
+            } else {
+                $fields[] = "$key = :$key";
+                $params[$key] = $value;
+            }
+        }
+
+        $sql = "UPDATE users SET " . implode(', ', $fields) . " WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
+    }
+
+    /**
+     * Supprime un utilisateur
+     */
+    public function delete(int $id)
+    {
+        $stmt = $this->db->prepare("DELETE FROM users WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
+
+    /**
+     * Bascule l'état de suspension d'un utilisateur
+     */
+    public function toggleSuspension(int $id)
+    {
+        $stmt = $this->db->prepare("UPDATE users SET is_suspended = NOT is_suspended WHERE id = ?");
+        return $stmt->execute([$id]);
+    }
+
+    /**
+     * Récupère un utilisateur par son ID
+     */
+    public function findById(int $id)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

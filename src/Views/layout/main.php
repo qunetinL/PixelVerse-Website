@@ -27,20 +27,33 @@
                     <li><a href="/contact" class="nav-link">Contact</a></li>
                     <?php if (isset($_SESSION['user'])): ?>
                         <?php if (in_array($_SESSION['user']['role'], ['admin', 'employe'])): ?>
-                            <li><a href="/admin/accessoires" class="nav-link admin-highlight">Admin</a></li>
-                            <li><a href="/admin/personnages" class="nav-link admin-highlight">Modération Persos</a></li>
-                            <li><a href="/admin/avis" class="nav-link admin-highlight">Modération Avis</a></li>
-                            <li><a href="/admin/logs" class="nav-link admin-highlight">Logs NoSQL</a></li>
-                        <?php endif; ?>
-                        <li><a href="/creer-personnage" class="nav-link standout">Créer Perso</a></li>
-                        <li><a href="/mes-personnages" class="nav-link">Mes Persos</a></li>
-                        <li class="user-profile-item">
-                            <div class="user-profile">
-                                <span class="pseudo"><?= htmlspecialchars($_SESSION['user']['pseudo']) ?></span>
-                                <a href="/deconnexion" class="logout-icon" title="Déconnexion">
-                                    <i class="fas fa-sign-out-alt"></i>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link admin-highlight dropdown-toggle">
+                                    Administration <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
                                 </a>
-                            </div>
+                                <ul class="dropdown-menu">
+                                    <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+                                        <li><a href="/admin/employes">Gestion Employés</a></li>
+                                    <?php endif; ?>
+                                    <li><a href="/admin/utilisateurs">Gestion Utilisateurs</a></li>
+                                    <li><a href="/admin/accessoires">Catalogue Accessoires</a></li>
+                                    <li><a href="/admin/personnages">Modération Persos</a></li>
+                                    <li><a href="/admin/avis">Modération Avis</a></li>
+                                    <li><a href="/admin/logs">Logs NoSQL</a></li>
+                                </ul>
+                            </li>
+                        <?php endif; ?>
+
+                        <li class="dropdown">
+                            <a href="#" class="nav-link standout dropdown-toggle">
+                                <i class="fas fa-user-circle"></i> <?= htmlspecialchars($_SESSION['user']['pseudo']) ?> <i
+                                    class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/creer-personnage">Créer un Personnage</a></li>
+                                <li><a href="/mes-personnages">Mes Personnages</a></li>
+                                <li><a href="/deconnexion" style="color: #e74c3c;">Déconnexion</a></li>
+                            </ul>
                         </li>
                     <?php else: ?>
                         <li><a href="/connexion" class="btn-connexion">Connexion</a></li>
