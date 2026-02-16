@@ -394,5 +394,34 @@
             // En prod, ceci mettrait à jour le shader ou l'image SVG
             previewBox.style.boxShadow = `inset 0 0 100px ${e.target.value}44`;
         });
+
+        // RNG Logic
+        const btnRandom = document.querySelector('.btn-random');
+        const genders = ['homme', 'femme', 'autre'];
+        const hairStyles = ['court', 'long', 'punk', 'chauve'];
+        const skinColors = ['#fbc3bc', '#e0ac69', '#8d5524', '#c68642', '#ffdbac'];
+
+        if (btnRandom) {
+            btnRandom.addEventListener('click', () => {
+                // Random Gender
+                const randomGender = genders[Math.floor(Math.random() * genders.length)];
+                const genderSelect = document.getElementById('char-gender');
+                if (genderSelect) genderSelect.value = randomGender;
+
+                // Random Hair
+                const randomHair = hairStyles[Math.floor(Math.random() * hairStyles.length)];
+                const hairRadio = document.querySelector(`input[name="hair_style"][value="${randomHair}"]`);
+                if (hairRadio) hairRadio.checked = true;
+
+                // Random Skin
+                const randomSkin = skinColors[Math.floor(Math.random() * skinColors.length)];
+                const skinInput = document.querySelector('input[name="skin_color"]');
+                if (skinInput) {
+                    skinInput.value = randomSkin;
+                    // Update preview manually since changing value in JS doesn't trigger 'input' event
+                    previewBox.style.boxShadow = `inset 0 0 100px ${randomSkin}44`;
+                }
+            });
+        }
     });
 </script>

@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $token = $_POST['csrf_token'] ?? null;
     if (!Security::verifyCsrfToken($token)) {
         http_response_code(403);
-        die("Erreur de sécurité : Jeton CSRF invalide ou manquant.");
+        die("<h1>Session Expirée</h1><p>Veuillez rafraîchir la page et réessayer. (Erreur CSRF)</p><a href='/connexion'>Retour à la connexion</a>");
     }
 }
 

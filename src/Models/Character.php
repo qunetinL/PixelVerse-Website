@@ -19,7 +19,7 @@ class Character
      */
     public function create(array $data): bool
     {
-        $sql = "INSERT INTO characters (user_id, name, gender, skin_color, hair_style, status) 
+        $sql = "INSERT INTO personnages (utilisateur_id, nom, genre, couleur_peau, style_cheveux, statut_validation) 
                 VALUES (:user_id, :name, :gender, :skin_color, :hair_style, :status)";
 
         $stmt = $this->db->prepare($sql);
@@ -39,7 +39,8 @@ class Character
      */
     public function getByUserId(int $userId): array
     {
-        $sql = "SELECT * FROM characters WHERE user_id = ? AND deleted_at IS NULL ORDER BY created_at DESC";
+        $sql = "SELECT id, utilisateur_id as user_id, nom as name, genre as gender, couleur_peau as skin_color, style_cheveux as hair_style, statut_validation as status, date_creation as created_at 
+                FROM personnages WHERE utilisateur_id = ? AND date_suppression IS NULL ORDER BY date_creation DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$userId]);
         return $stmt->fetchAll();
@@ -50,7 +51,8 @@ class Character
      */
     public function getById(int $id)
     {
-        $sql = "SELECT * FROM characters WHERE id = ? AND deleted_at IS NULL";
+        $sql = "SELECT id, utilisateur_id as user_id, nom as name, genre as gender, couleur_peau as skin_color, style_cheveux as hair_style, statut_validation as status, date_creation as created_at, rejection_reason 
+                FROM personnages WHERE id = ? AND date_suppression IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
@@ -61,7 +63,7 @@ class Character
      */
     public function nameExists(string $name): bool
     {
-        $sql = "SELECT COUNT(*) FROM characters WHERE name = ?";
+        $sql = "SELECT COUNT(*) FROM personnages WHERE nom = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$name]);
         return $stmt->fetchColumn() > 0;
@@ -72,7 +74,7 @@ class Character
      */
     public function softDelete(int $id, int $userId): bool
     {
-        $sql = "UPDATE characters SET deleted_at = NOW() WHERE id = ? AND user_id = ?";
+        $sql = "UPDATE personnages SET date_suppression = NOW() WHERE id = ? AND utilisateur_id = ?";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$id, $userId]);
     }
@@ -115,9 +117,10 @@ class Character
      */
     public function getAccessories(int $characterId): array
     {
-        $sql = "SELECT a.* FROM accessories a 
-                JOIN character_accessories ca ON a.id = ca.accessory_id 
-                WHERE ca.character_id = ?";
+        $sql = "SELECT a.id, a.nom as name, a.type, a.image_url as icon, a.est_actif as is_active 
+                FROM accessoires a 
+                JOIN personnage_accessoire pa ON a.id = pa.accessoire_id 
+                WHERE pa.personnage_id = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$characterId]);
         return $stmt->fetchAll();
@@ -128,7 +131,7 @@ class Character
      */
     public function equipAccessory(int $characterId, int $accessoryId): bool
     {
-        $sql = "INSERT IGNORE INTO character_accessories (character_id, accessory_id) VALUES (?, ?)";
+        $sql = "INSERT IGNORE INTO personnage_accessoire (personnage_id, accessoire_id) VALUES (?, ?)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$characterId, $accessoryId]);
     }
@@ -138,7 +141,7 @@ class Character
      */
     public function unequipAccessory(int $characterId, int $accessoryId): bool
     {
-        $sql = "DELETE FROM character_accessories WHERE character_id = ? AND accessory_id = ?";
+        $sql = "DELETE FROM personnage_accessoire WHERE personnage_id = ? AND accessoire_id = ?";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$characterId, $accessoryId]);
     }
@@ -151,11 +154,11 @@ class Character
         $this->db->beginTransaction();
         try {
             // On retire tout
-            $stmt = $this->db->prepare("DELETE FROM character_accessories WHERE character_id = ?");
+            $stmt = $this->db->prepare("DELETE FROM personnage_accessoire WHERE personnage_id = ?");
             $stmt->execute([$characterId]);
 
             // On ajoute les nouveaux
-            $stmt = $this->db->prepare("INSERT INTO character_accessories (character_id, accessory_id) VALUES (?, ?)");
+            $stmt = $this->db->prepare("INSERT INTO personnage_accessoire (personnage_id, accessoire_id) VALUES (?, ?)");
             foreach ($accessoryIds as $accId) {
                 $stmt->execute([$characterId, (int) $accId]);
             }
@@ -172,11 +175,11 @@ class Character
      */
     public function getPending(): array
     {
-        $sql = "SELECT c.*, u.pseudo as user_pseudo 
-                FROM characters c 
-                JOIN users u ON c.user_id = u.id 
-                WHERE c.status = 'pending' AND c.deleted_at IS NULL 
-                ORDER BY c.created_at ASC";
+        $sql = "SELECT c.id, c.utilisateur_id as user_id, c.nom as name, c.genre as gender, c.couleur_peau as skin_color, c.style_cheveux as hair_style, c.statut_validation as status, c.date_creation as created_at, u.pseudo as user_pseudo 
+                FROM personnages c 
+                JOIN utilisateurs u ON c.utilisateur_id = u.id 
+                WHERE c.statut_validation = 'pending' AND c.date_suppression IS NULL 
+                ORDER BY c.date_creation ASC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -187,7 +190,7 @@ class Character
      */
     public function updateStatus(int $id, string $status, ?string $reason = null): bool
     {
-        $sql = "UPDATE characters SET status = :status, rejection_reason = :reason WHERE id = :id";
+        $sql = "UPDATE personnages SET statut_validation = :status, rejection_reason = :reason WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             'id' => $id,
@@ -201,16 +204,16 @@ class Character
      */
     public function getFilteredApproved(array $filters = []): array
     {
-        $sql = "SELECT c.*, u.pseudo as user_pseudo 
-                FROM characters c 
-                JOIN users u ON c.user_id = u.id 
-                WHERE c.status = 'approved' AND c.deleted_at IS NULL";
+        $sql = "SELECT c.id, c.utilisateur_id as user_id, c.nom as name, c.genre as gender, c.couleur_peau as skin_color, c.style_cheveux as hair_style, c.statut_validation as status, c.date_creation as created_at, u.pseudo as user_pseudo 
+                FROM personnages c 
+                JOIN utilisateurs u ON c.utilisateur_id = u.id 
+                WHERE c.statut_validation = 'approved' AND c.date_suppression IS NULL";
 
         $params = [];
 
         // Filtre par genre
         if (!empty($filters['gender'])) {
-            $sql .= " AND c.gender = :gender";
+            $sql .= " AND c.genre = :gender";
             $params['gender'] = $filters['gender'];
         }
 
@@ -222,7 +225,7 @@ class Character
 
         // Tri par date
         $sort = $filters['sort'] ?? 'desc';
-        $sql .= " ORDER BY c.created_at " . ($sort === 'asc' ? 'ASC' : 'DESC');
+        $sql .= " ORDER BY c.date_creation " . ($sort === 'asc' ? 'ASC' : 'DESC');
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);

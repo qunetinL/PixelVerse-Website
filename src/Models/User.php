@@ -19,7 +19,7 @@ class User
      */
     public function findByEmail(string $email)
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt = $this->db->prepare("SELECT * FROM utilisateurs WHERE email = ?");
         $stmt->execute([$email]);
         return $stmt->fetch();
     }
@@ -29,7 +29,7 @@ class User
      */
     public function findByPseudo(string $pseudo)
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE pseudo = ?");
+        $stmt = $this->db->prepare("SELECT * FROM utilisateurs WHERE pseudo = ?");
         $stmt->execute([$pseudo]);
         return $stmt->fetch();
     }
@@ -42,7 +42,7 @@ class User
         // Hachage du mot de passe avec Argon2id (recommandé pour PHP 8.2)
         $hashedPassword = password_hash($data['password'], PASSWORD_ARGON2ID);
 
-        $sql = "INSERT INTO users (pseudo, email, password, role) VALUES (:pseudo, :email, :password, :role)";
+        $sql = "INSERT INTO utilisateurs (pseudo, email, mot_de_passe, role) VALUES (:pseudo, :email, :password, :role)";
         $stmt = $this->db->prepare($sql);
 
         return $stmt->execute([
@@ -60,8 +60,8 @@ class User
     {
         $user = $this->findByEmail($email);
 
-        if ($user && password_verify($password, $user['password'])) {
-            if ($user['is_suspended']) {
+        if ($user && password_verify($password, $user['mot_de_passe'])) {
+            if ($user['est_suspendu']) {
                 return ['error' => 'Votre compte est suspendu.'];
             }
             return $user;
@@ -78,7 +78,7 @@ class User
         $token = bin2hex(random_bytes(32));
         $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
-        $sql = "UPDATE users SET reset_token = ?, reset_expires_at = ? WHERE email = ?";
+        $sql = "UPDATE utilisateurs SET reset_token = ?, reset_expires_at = ? WHERE email = ?";
         $stmt = $this->db->prepare($sql);
 
         if ($stmt->execute([$token, $expires, $email])) {
@@ -93,14 +93,14 @@ class User
      */
     public function resetPassword(string $token, string $newPassword)
     {
-        $sql = "SELECT id FROM users WHERE reset_token = ? AND reset_expires_at > NOW()";
+        $sql = "SELECT id FROM utilisateurs WHERE reset_token = ? AND reset_expires_at > NOW()";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$token]);
         $user = $stmt->fetch();
 
         if ($user) {
             $hashedPassword = password_hash($newPassword, PASSWORD_ARGON2ID);
-            $updateSql = "UPDATE users SET password = ?, reset_token = NULL, reset_expires_at = NULL WHERE id = ?";
+            $updateSql = "UPDATE utilisateurs SET mot_de_passe = ?, reset_token = NULL, reset_expires_at = NULL WHERE id = ?";
             $updateStmt = $this->db->prepare($updateSql);
             return $updateStmt->execute([$hashedPassword, $user['id']]);
         }
@@ -113,7 +113,7 @@ class User
      */
     public function getAllByRole(string $role)
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE role = ? ORDER BY pseudo ASC");
+        $stmt = $this->db->prepare("SELECT * FROM utilisateurs WHERE role = ? ORDER BY pseudo ASC");
         $stmt->execute([$role]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -123,7 +123,7 @@ class User
      */
     public function getAllUsers()
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE role != 'admin' ORDER BY pseudo ASC");
+        $stmt = $this->db->prepare("SELECT * FROM utilisateurs WHERE role != 'admin' ORDER BY pseudo ASC");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -138,7 +138,7 @@ class User
 
         foreach ($data as $key => $value) {
             if ($key === 'password') {
-                $fields[] = "password = :password";
+                $fields[] = "mot_de_passe = :password";
                 $params['password'] = password_hash($value, PASSWORD_ARGON2ID);
             } else {
                 $fields[] = "$key = :$key";
@@ -146,7 +146,7 @@ class User
             }
         }
 
-        $sql = "UPDATE users SET " . implode(', ', $fields) . " WHERE id = :id";
+        $sql = "UPDATE utilisateurs SET " . implode(', ', $fields) . " WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute($params);
     }
@@ -156,7 +156,7 @@ class User
      */
     public function delete(int $id)
     {
-        $stmt = $this->db->prepare("DELETE FROM users WHERE id = ?");
+        $stmt = $this->db->prepare("DELETE FROM utilisateurs WHERE id = ?");
         return $stmt->execute([$id]);
     }
 
@@ -165,7 +165,7 @@ class User
      */
     public function toggleSuspension(int $id)
     {
-        $stmt = $this->db->prepare("UPDATE users SET is_suspended = NOT is_suspended WHERE id = ?");
+        $stmt = $this->db->prepare("UPDATE utilisateurs SET est_suspendu = NOT est_suspendu WHERE id = ?");
         return $stmt->execute([$id]);
     }
 
@@ -174,7 +174,7 @@ class User
      */
     public function findById(int $id)
     {
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt = $this->db->prepare("SELECT * FROM utilisateurs WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

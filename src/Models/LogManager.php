@@ -19,21 +19,30 @@ class LogManager
 
     public function __construct()
     {
-        // On récupère les identifiants depuis l'environnement (Docker/System)
-        // Les valeurs par défaut correspondent au docker-compose.yml
-        $user = getenv('MONGO_INITDB_ROOT_USERNAME') ?: 'root';
-        $pass = getenv('MONGO_INITDB_ROOT_PASSWORD') ?: 'rootpassword';
-        $host = 'mongo'; // Nom du service dans docker-compose
-        $port = 27017;
+        // On priorité la variable MONGO_URL (chaîne complète type Atlas)
+        $uri = getenv('MONGO_URL');
+
+        if (!$uri) {
+            // Fallback sur les paramètres individuels (Docker local)
+            $user = getenv('MONGO_INITDB_ROOT_USERNAME') ?: 'root';
+            $pass = getenv('MONGO_INITDB_ROOT_PASSWORD') ?: 'rootpassword';
+            $host = getenv('MONGO_HOST') ?: 'mongo';
+            $port = getenv('MONGO_PORT') ?: '27017';
+            $uri = "mongodb://{$user}:{$pass}@{$host}:{$port}/";
+        }
 
         $this->dbName = getenv('MYSQL_DATABASE') ?: 'pixelverse';
 
-        $uri = "mongodb://{$user}:{$pass}@{$host}:{$port}/";
-
         try {
-            $this->manager = new Manager($uri);
+            // Options pour éviter les erreurs de handshake TLS sur certains conteneurs
+            $options = [
+                'tls' => true,
+                'tlsAllowInvalidCertificates' => true
+            ];
+            $this->manager = new Manager($uri, $options);
         } catch (\Exception $e) {
             // Silencieusement faillir si MongoDB n'est pas dispo
+            // error_log("Mongo Error: " . $e->getMessage());
             $this->manager = null;
         }
     }

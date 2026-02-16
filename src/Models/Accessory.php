@@ -19,12 +19,12 @@ class Accessory
      */
     public function create(array $data): bool
     {
-        $sql = "INSERT INTO accessories (name, type, icon, is_active) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO accessoires (nom, type, image_url, est_actif) VALUES (?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             $data['name'],
             $data['type'],
-            $data['icon'] ?? 'fa-item',
+            $data['icon'] ?? 'fa-item', // Note: DB expects image_url, check if icon is correct mapping or if we need path
             $data['is_active'] ?? 1
         ]);
     }
@@ -34,7 +34,7 @@ class Accessory
      */
     public function getAll(): array
     {
-        $sql = "SELECT * FROM accessories ORDER BY type, name";
+        $sql = "SELECT id, nom as name, type, image_url as icon, est_actif as is_active FROM accessoires ORDER BY type, nom";
         return $this->db->query($sql)->fetchAll();
     }
 
@@ -43,7 +43,8 @@ class Accessory
      */
     public function getActiveByType(string $type): array
     {
-        $sql = "SELECT * FROM accessories WHERE type = ? AND is_active = 1 ORDER BY name";
+        // Aliasing columns to match what Controller expects
+        $sql = "SELECT id, nom as name, type, image_url as icon, est_actif as is_active FROM accessoires WHERE type = ? AND est_actif = 1 ORDER BY nom";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$type]);
         return $stmt->fetchAll();
@@ -54,7 +55,7 @@ class Accessory
      */
     public function getById(int $id)
     {
-        $sql = "SELECT * FROM accessories WHERE id = ?";
+        $sql = "SELECT id, nom as name, type, image_url as icon, est_actif as is_active FROM accessoires WHERE id = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
@@ -65,7 +66,7 @@ class Accessory
      */
     public function update(int $id, array $data): bool
     {
-        $sql = "UPDATE accessories SET name = ?, type = ?, icon = ?, is_active = ? WHERE id = ?";
+        $sql = "UPDATE accessoires SET nom = ?, type = ?, image_url = ?, est_actif = ? WHERE id = ?";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             $data['name'],
@@ -81,7 +82,7 @@ class Accessory
      */
     public function delete(int $id): bool
     {
-        $sql = "DELETE FROM accessories WHERE id = ?";
+        $sql = "DELETE FROM accessoires WHERE id = ?";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$id]);
     }

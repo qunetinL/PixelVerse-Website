@@ -5,10 +5,10 @@
     </div>
 
     <?php if (isset($_SESSION['success'])): ?>
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> <?= $_SESSION['success'];
-                unset($_SESSION['success']); ?>
-            </div>
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> <?= $_SESSION['success'];
+            unset($_SESSION['success']); ?>
+        </div>
     <?php endif; ?>
 
     <div class="admin-card">
@@ -24,52 +24,54 @@
                 </thead>
                 <tbody>
                     <?php foreach ($users as $u): ?>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="user-avatar-sm mr-3">
-                                            <i class="fas fa-user-circle fa-2x opacity-20"></i>
-                                        </div>
-                                        <div>
-                                            <div class="font-weight-bold"><?= htmlspecialchars($u['pseudo']) ?></div>
-                                            <small class="text-muted"><?= htmlspecialchars($u['email']) ?></small>
-                                        </div>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="user-avatar-sm mr-3">
+                                        <i class="fas fa-user-circle fa-2x opacity-20"></i>
                                     </div>
-                                </td>
-                                <td>
-                                    <span class="badge-role role-<?= $u['role'] ?>">
-                                        <?= ucfirst($u['role']) ?>
+                                    <div>
+                                        <div class="font-weight-bold"><?= htmlspecialchars($u['pseudo']) ?></div>
+                                        <small class="text-muted"><?= htmlspecialchars($u['email']) ?></small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge-role role-<?= $u['role'] ?>">
+                                    <?= ucfirst($u['role']) ?>
+                                </span>
+                            </td>
+                            <td>
+                                <?php if ($u['est_suspendu']): ?>
+                                    <span class="status-badge suspended">
+                                        <i class="fas fa-ban mr-1"></i> Suspendu
                                     </span>
-                                </td>
-                                <td>
-                                    <?php if ($u['is_suspended']): ?>
-                                            <span class="status-badge suspended">
-                                                <i class="fas fa-ban mr-1"></i> Suspendu
-                                            </span>
-                                    <?php else: ?>
-                                            <span class="status-badge active">
-                                                <i class="fas fa-check mr-1"></i> Actif
-                                            </span>
-                                    <?php endif; ?>
-                                </td>
-                                <td class="text-center">
-                                    <div class="dropdown action-dropdown">
-                                        <button class="btn-icon dropdown-toggle" type="button" data-toggle="dropdown">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <form action="/admin/utilisateurs/toggle-suspension" method="POST">
-                                                <?= \PixelVerseApp\Core\Security::csrfInput() ?>
-                                                <input type="hidden" name="id" value="<?= $u['id'] ?>">
-                                                <button type="submit" class="dropdown-item <?= $u['is_suspended'] ? 'text-success' : 'text-danger' ?>">
-                                                    <i class="fas <?= $u['is_suspended'] ? 'fa-user-check' : 'fa-user-slash' ?> mr-2"></i>
-                                                    <?= $u['is_suspended'] ? 'Réactiver' : 'Suspendre' ?>
-                                                </button>
-                                            </form>
-                                        </div>
+                                <?php else: ?>
+                                    <span class="status-badge active">
+                                        <i class="fas fa-check mr-1"></i> Actif
+                                    </span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="text-center">
+                                <div class="dropdown action-dropdown">
+                                    <button class="btn-icon dropdown-toggle" type="button" data-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <form action="/admin/utilisateurs/toggle-suspension" method="POST">
+                                            <?= \PixelVerseApp\Core\Security::csrfInput() ?>
+                                            <input type="hidden" name="id" value="<?= $u['id'] ?>">
+                                            <button type="submit"
+                                                class="dropdown-item <?= $u['est_suspendu'] ? 'text-success' : 'text-danger' ?>">
+                                                <i
+                                                    class="fas <?= $u['est_suspendu'] ? 'fa-user-check' : 'fa-user-slash' ?> mr-2"></i>
+                                                <?= $u['est_suspendu'] ? 'Réactiver' : 'Suspendre' ?>
+                                            </button>
+                                        </form>
                                     </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                        </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
@@ -86,9 +88,24 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
-    .role-admin { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.3); }
-    .role-employe { background: rgba(241, 196, 15, 0.2); color: #f1c40f; border: 1px solid rgba(241, 196, 15, 0.3); }
-    .role-joueur { background: rgba(52, 152, 219, 0.2); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.3); }
+
+    .role-admin {
+        background: rgba(231, 76, 60, 0.2);
+        color: #e74c3c;
+        border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+
+    .role-employe {
+        background: rgba(241, 196, 15, 0.2);
+        color: #f1c40f;
+        border: 1px solid rgba(241, 196, 15, 0.3);
+    }
+
+    .role-joueur {
+        background: rgba(52, 152, 219, 0.2);
+        color: #3498db;
+        border: 1px solid rgba(52, 152, 219, 0.3);
+    }
 
     .status-badge {
         display: inline-flex;
@@ -98,10 +115,21 @@
         font-size: 0.8rem;
         font-weight: 600;
     }
-    .status-badge.active { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
-    .status-badge.suspended { background: rgba(231, 76, 60, 0.15); color: #e74c3c; }
 
-    .action-dropdown .dropdown-toggle::after { display: none; }
+    .status-badge.active {
+        background: rgba(46, 204, 113, 0.15);
+        color: #2ecc71;
+    }
+
+    .status-badge.suspended {
+        background: rgba(231, 76, 60, 0.15);
+        color: #e74c3c;
+    }
+
+    .action-dropdown .dropdown-toggle::after {
+        display: none;
+    }
+
     .action-dropdown .btn-icon {
         background: none;
         border: none;
@@ -110,19 +138,24 @@
         cursor: pointer;
         transition: color 0.2s;
     }
-    .action-dropdown .btn-icon:hover { color: white; }
-    
+
+    .action-dropdown .btn-icon:hover {
+        color: white;
+    }
+
     .dropdown-menu {
         background: var(--color-bg-card);
         border: 1px solid #444;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }
+
     .dropdown-item {
         color: white;
         padding: 10px 20px;
         font-size: 0.9rem;
     }
+
     .dropdown-item:hover {
-        background: rgba(255,255,255,0.05);
+        background: rgba(255, 255, 255, 0.05);
     }
 </style>

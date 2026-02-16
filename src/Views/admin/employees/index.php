@@ -6,13 +6,15 @@
 
     <?php if (isset($_SESSION['success'])): ?>
         <div class="alert alert-success">
-            <i class="fas fa-check-circle"></i> <?= $_SESSION['success']; unset($_SESSION['success']); ?>
+            <i class="fas fa-check-circle"></i> <?= $_SESSION['success'];
+            unset($_SESSION['success']); ?>
         </div>
     <?php endif; ?>
 
     <?php if (isset($_SESSION['error'])): ?>
         <div class="alert alert-danger">
-            <i class="fas fa-exclamation-triangle"></i> <?= $_SESSION['error']; unset($_SESSION['error']); ?>
+            <i class="fas fa-exclamation-triangle"></i> <?= $_SESSION['error'];
+            unset($_SESSION['error']); ?>
         </div>
     <?php endif; ?>
 
@@ -47,7 +49,8 @@
                                 </td>
                                 <td><?= htmlspecialchars($emp['email']) ?></td>
                                 <td>
-                                    <span class="text-muted"><?= date('d/m/Y', strtotime($emp['created_at'])) ?></span>
+                                    <span
+                                        class="text-muted"><?= $emp['date_creation'] ? date('d/m/Y', strtotime($emp['date_creation'])) : 'N/A' ?></span>
                                 </td>
                                 <td class="text-center">
                                     <form action="/admin/employes/supprimer" method="POST" style="display:inline;"
@@ -73,17 +76,20 @@
     <div class="modal-content animate-slide-down">
         <div class="modal-header-nav">
             <h3 class="mb-0">Nouvel Employé</h3>
-            <button class="close-btn" onclick="document.getElementById('addEmployeeModal').style.display='none'">&times;</button>
+            <button class="close-btn"
+                onclick="document.getElementById('addEmployeeModal').style.display='none'">&times;</button>
         </div>
         <form action="/admin/employes/nouveau" method="POST" class="mt-4">
             <?= \PixelVerseApp\Core\Security::csrfInput() ?>
             <div class="form-group mb-3">
                 <label for="pseudo">Pseudo</label>
-                <input type="text" name="pseudo" id="pseudo" class="form-control" required placeholder="nom d'utilisateur">
+                <input type="text" name="pseudo" id="pseudo" class="form-control" required
+                    placeholder="nom d'utilisateur">
             </div>
             <div class="form-group mb-3">
                 <label for="email">Adresse Email</label>
-                <input type="email" name="email" id="email" class="form-control" required placeholder="email@pixelverse.com">
+                <input type="email" name="email" id="email" class="form-control" required
+                    placeholder="email@pixelverse.com">
             </div>
             <div class="form-group mb-4">
                 <label for="password">Mot de passe provisoire</label>
@@ -121,14 +127,14 @@
         width: 90%;
         max-width: 500px;
         border: 1px solid var(--color-primary);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     }
 
     .modal-header-nav {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         padding-bottom: 15px;
     }
 
@@ -152,12 +158,19 @@
     }
 
     @keyframes slideDown {
-        from { transform: translateY(-50px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     .form-control {
-        background: rgba(0,0,0,0.2) !important;
+        background: rgba(0, 0, 0, 0.2) !important;
         border: 1px solid #444 !important;
         color: white !important;
         padding: 12px !important;

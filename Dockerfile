@@ -19,6 +19,16 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Activation du module rewrite d'Apache
 RUN a2enmod rewrite
 
-# Configuration du DocumentRoot pour pointer vers /www
+# Configuration du DocumentRoot
+ENV APACHE_DOCUMENT_ROOT /var/www/html/www
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Copie des fichiers de l'application
+COPY . /var/www/html
+
+# Installation des dépendances avec Composer
+RUN composer install --no-dev --optimize-autoloader
+
+# Permissions pour Apache
+RUN chown -R www-data:www-data /var/www/html
